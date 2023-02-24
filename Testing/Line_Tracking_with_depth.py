@@ -1,6 +1,7 @@
 import pyrealsense2 as rs
 import numpy as np
 import cv2
+import pandas as pd
 
 # Configure depth and color streams
 pipeline = rs.pipeline()
@@ -27,6 +28,10 @@ try:
         # Apply threshold to get a binary image
         ret, binary_image = cv2.threshold(cv2.cvtColor(color_image, cv2.COLOR_BGR2GRAY), 210, 255, cv2.THRESH_BINARY)
 
+
+        linedata = {}
+        line_num = 1
+
         # Detect lines using HoughLinesP
         lines = cv2.HoughLinesP(binary_image, 1, np.pi/180, 50, maxLineGap=50)
         if lines is not None:
@@ -43,6 +48,12 @@ try:
                 
                 # Print and store the point cloud data
                 print("Point cloud data along the line:", line_point_cloud)
+                df = pd.DataFrame(line_point_cloud, columns=['x', 'y', 'z', 'depth'])
+                linedata[line_num] = df
+                line_num+=1
+        
+        for key in linedata:
+            df.to_csv("line{key}.csv", index=False)
 
         # Show images
         cv2.imshow("Binary Image", binary_image)
