@@ -1,0 +1,3 @@
+"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\Testingpro.dir/objects.a
+C:\PROGRA~1\CODEBL~1\MinGW\bin\ar.exe qc CMakeFiles\Testingpro.dir/objects.a @CMakeFiles\Testingpro.dir\objects1
+C:\PROGRA~1\CODEBL~1\MinGW\bin\G__~1.EXE -g -Wl,--whole-archive CMakeFiles\Testingpro.dir/objects.a -Wl,--no-whole-archive -o Testingpro.exe -Wl,--out-implib,libTestingpro.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\Testingpro.dir\linkLibs.rsp
