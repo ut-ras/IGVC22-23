@@ -108,14 +108,17 @@ def draw_lines(img, lines, color=[255, 0, 0], thickness=6):
 
             # Print and store the point cloud data
             print("Point cloud data along the line:", line_point_cloud)
-
-            df = pd.DataFrame(line_point_cloud, columns=['x', 'y', 'z'])
-            linedata[line_num] = df
+            
+            # commenting out save to df
+            # df = pd.DataFrame(line_point_cloud, columns=['x', 'y', 'z'])
+            # linedata[line_num] = df
             line_num+=1
         #2
         y_global_min = min(y1,y2,y_global_min)
-    for key in linedata:
-        df.to_csv(f"line{key}.csv", index=False)
+
+    ## Commenting out CSV save
+    # for key in linedata:
+    #     df.to_csv(f"line{key}.csv", index=False)
     
     # to prevent errors in challenge video from dividing by zero
     if((len(l_lane) == 0) or (len(r_lane) == 0)):
@@ -149,6 +152,33 @@ def draw_lines(img, lines, color=[255, 0, 0], thickness=6):
         l_x2 = int((y_max - l_b)/l_slope_mean)   
         r_x1 = int((y_global_min - r_b)/r_slope_mean)
         r_x2 = int((y_max - r_b)/r_slope_mean)
+
+        if l_x1 > r_x1:
+            l_x1 = int((l_x1+r_x1)/2)
+            r_x1 = l_x1
+            l_y1 = int((l_slope_mean * l_x1 ) + l_b)
+            r_y1 = int((r_slope_mean * r_x1 ) + r_b)
+            l_y2 = int((l_slope_mean * l_x2 ) + l_b)
+            r_y2 = int((r_slope_mean * r_x2 ) + r_b)
+        else:
+            l_y1 = y_global_min
+            l_y2 = y_max
+            r_y1 = y_global_min
+            r_y2 = y_max
+        
+        current_frame = np.array([l_x1,l_y1,l_x2,l_y2,r_x1,r_y1,r_x2,r_y2],dtype ="float32")
+    
+        if first_frame == 1:
+            next_frame = current_frame        
+            first_frame = 0        
+        else :
+            prev_frame = cache
+            next_frame = (1-α)*prev_frame+α*current_frame
+                
+        cv2.line(img, (int(next_frame[0]), int(next_frame[1])), (int(next_frame[2]),int(next_frame[3])), color, thickness)
+        cv2.line(img, (int(next_frame[4]), int(next_frame[5])), (int(next_frame[6]),int(next_frame[7])), color, thickness)
+    
+        cache = next_frame
     except:
         l_x1 = 1
         l_x2 = 1 
@@ -156,32 +186,6 @@ def draw_lines(img, lines, color=[255, 0, 0], thickness=6):
         r_x2 = 1
     
     #6
-    if l_x1 > r_x1:
-        l_x1 = int((l_x1+r_x1)/2)
-        r_x1 = l_x1
-        l_y1 = int((l_slope_mean * l_x1 ) + l_b)
-        r_y1 = int((r_slope_mean * r_x1 ) + r_b)
-        l_y2 = int((l_slope_mean * l_x2 ) + l_b)
-        r_y2 = int((r_slope_mean * r_x2 ) + r_b)
-    else:
-        l_y1 = y_global_min
-        l_y2 = y_max
-        r_y1 = y_global_min
-        r_y2 = y_max
-      
-    current_frame = np.array([l_x1,l_y1,l_x2,l_y2,r_x1,r_y1,r_x2,r_y2],dtype ="float32")
-    
-    if first_frame == 1:
-        next_frame = current_frame        
-        first_frame = 0        
-    else :
-        prev_frame = cache
-        next_frame = (1-α)*prev_frame+α*current_frame
-             
-    cv2.line(img, (int(next_frame[0]), int(next_frame[1])), (int(next_frame[2]),int(next_frame[3])), color, thickness)
-    cv2.line(img, (int(next_frame[4]), int(next_frame[5])), (int(next_frame[6]),int(next_frame[7])), color, thickness)
-    
-    cache = next_frame
     
 
 def hough_lines(img, rho, theta, threshold, min_line_len, max_line_gap):
