@@ -57,14 +57,17 @@ try:
 
         points = []
 
-        for i in range(len(line_point_cloud)):
-            x = line_point_cloud[i][0]
-            y = line_point_cloud[i][1]
-            z = line_point_cloud[i][2]
-            pt = [x, y, z, 0]
-            rgb = struct.unpack('I', struct.pack('BBBB', 255, 255, 255, 255))[0]
-            pt[3] = rgb
-            points.append(pt)
+        try:    
+            for i in range(len(line_point_cloud)):
+                x = line_point_cloud[i][0]
+                y = line_point_cloud[i][1]
+                z = line_point_cloud[i][2]
+                pt = [x, y, z, 0]
+                rgb = struct.unpack('I', struct.pack('BBBB', 255, 255, 255, 255))[0]
+                pt[3] = rgb
+                points.append(pt)
+        except:
+            points.append([1, 2, 3, 4])
 
         fields = [PointField('x', 0, PointField.FLOAT32, 1),
             PointField('y', 4, PointField.FLOAT32, 1),
@@ -77,10 +80,9 @@ try:
         header.frame_id = "map"
         pc2 = point_cloud2.create_cloud(header, fields, points)
 
-        while not rospy.is_shutdown():
-            pc2.header.stamp = rospy.Time.now()
-            pub.publish(pc2)
-            rospy.sleep(1.0)
+        pc2.header.stamp = rospy.Time.now()
+        pub.publish(pc2)
+        rospy.sleep(1.0)
 
         # Show images
         # cv2.imshow("Binary Image", binary_image)
