@@ -39,6 +39,7 @@ try:
 
         # Detect lines using HoughLinesP
         lines = cv2.HoughLinesP(binary_image, 1, np.pi/180, 50, maxLineGap=50)
+        line_point_cloud = []
         if lines is not None:
             for line in lines:
                 x1, y1, x2, y2 = line[0]
@@ -46,9 +47,9 @@ try:
                 
                 # Get point cloud data along the line
                 depth_intrin = depth_frame.profile.as_video_stream_profile().intrinsics
-                line_point_cloud = []
                 for x, y in zip(range(x1, x2), range(y1, y2)):
                     point = rs.rs2_deproject_pixel_to_point(depth_intrin, [x, y], depth_frame.get_distance(x, y))
+                    print(f"x is {x} y is {y}")
                     line_point_cloud.append(point)
 
                 # Print and store the point cloud data
@@ -82,7 +83,7 @@ try:
 
         pc2.header.stamp = rospy.Time.now()
         pub.publish(pc2)
-        rospy.sleep(1.0)
+        # rospy.sleep(1.0)
 
         # Show images
         # cv2.imshow("Binary Image", binary_image)
