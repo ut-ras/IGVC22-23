@@ -1,0 +1,18 @@
+<launch>
+  <!-- Launch linetracking_to_pc2.py -->
+  <node name="linetracking_to_pc2" pkg="line_detector" type="linetracking_to_pc2.py"/>
+
+  <group ns="pointcloud_to_laserscan">
+    <!-- Wait for linetracking_to_pc2.py to start before launching sample_node -->
+    <node pkg="rospy" type="wait_for_message.py" name="wait_for_linetracking_to_pc2" args="/linetracking_to_pc2/pointcloud2_ready std_msgs/Empty"/>
+    <!-- Launch sample_node -->
+    <include file="$(find pointcloud_to_laserscan)/launch/sample_node.launch"/>
+  </group>
+
+  <group ns="ira_laser_tools">
+    <!-- Wait for sample_node to start before launching laserscan_multi_merger -->
+    <node pkg="rospy" type="wait_for_message.py" name="wait_for_sample_node" args="/scan std_msgs/LaserScan"/>
+    <!-- Launch laserscan_multi_merger -->
+    <include file="$(find ira_laser_tools)/launch/laserscan_multi_merger.launch"/>
+  </group>
+</launch>
