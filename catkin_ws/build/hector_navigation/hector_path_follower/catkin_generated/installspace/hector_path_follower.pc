@@ -1,0 +1,8 @@
+prefix=/home/ras/catkin_ws/install
+
+Name: hector_path_follower
+Description: Description of hector_path_follower
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lhector_path_follower
+Requires: nav_msgs roscpp tf

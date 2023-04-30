@@ -1,0 +1,8 @@
+prefix=/home/ras/catkin_ws/install
+
+Name: ceres_catkin
+Description: Description of ceres_catkin
+Version: 1.12.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lceres
+Requires: glog_catkin

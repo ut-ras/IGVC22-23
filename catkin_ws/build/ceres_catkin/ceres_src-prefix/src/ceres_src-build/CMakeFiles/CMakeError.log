@@ -1,0 +1,104 @@
+Determining if the function sgemm_ exists failed with the following output:
+Change Dir: /home/ras/catkin_ws/build/ceres_catkin/ceres_src-prefix/src/ceres_src-build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_f0094/fast && make[3]: Entering directory '/home/ras/catkin_ws/build/ceres_catkin/ceres_src-prefix/src/ceres_src-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_f0094.dir/build.make CMakeFiles/cmTC_f0094.dir/build
+make[4]: Entering directory '/home/ras/catkin_ws/build/ceres_catkin/ceres_src-prefix/src/ceres_src-build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_f0094.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=sgemm_   -o CMakeFiles/cmTC_f0094.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_f0094
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f0094.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=sgemm_    -rdynamic CMakeFiles/cmTC_f0094.dir/CheckFunctionExists.c.o  -o cmTC_f0094 
+/usr/bin/ld: CMakeFiles/cmTC_f0094.dir/CheckFunctionExists.c.o: in function `main':
+CheckFunctionExists.c:(.text+0x14): undefined reference to `sgemm_'
+collect2: error: ld returned 1 exit status
+make[4]: *** [CMakeFiles/cmTC_f0094.dir/build.make:87: cmTC_f0094] Error 1
+make[4]: Leaving directory '/home/ras/catkin_ws/build/ceres_catkin/ceres_src-prefix/src/ceres_src-build/CMakeFiles/CMakeTmp'
+make[3]: *** [Makefile:121: cmTC_f0094/fast] Error 2
+make[3]: Leaving directory '/home/ras/catkin_ws/build/ceres_catkin/ceres_src-prefix/src/ceres_src-build/CMakeFiles/CMakeTmp'
+
+
+
+Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
+Change Dir: /home/ras/catkin_ws/build/ceres_catkin/ceres_src-prefix/src/ceres_src-build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_d23a5/fast && make[3]: Entering directory '/home/ras/catkin_ws/build/ceres_catkin/ceres_src-prefix/src/ceres_src-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_d23a5.dir/build.make CMakeFiles/cmTC_d23a5.dir/build
+make[4]: Entering directory '/home/ras/catkin_ws/build/ceres_catkin/ceres_src-prefix/src/ceres_src-build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_d23a5.dir/src.c.o
+/usr/bin/cc   -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_d23a5.dir/src.c.o   -c /home/ras/catkin_ws/build/ceres_catkin/ceres_src-prefix/src/ceres_src-build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_d23a5
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d23a5.dir/link.txt --verbose=1
+/usr/bin/cc  -DCMAKE_HAVE_LIBC_PTHREAD    -rdynamic CMakeFiles/cmTC_d23a5.dir/src.c.o  -o cmTC_d23a5 
+/usr/bin/ld: CMakeFiles/cmTC_d23a5.dir/src.c.o: in function `main':
+src.c:(.text+0x46): undefined reference to `pthread_create'
+/usr/bin/ld: src.c:(.text+0x52): undefined reference to `pthread_detach'
+/usr/bin/ld: src.c:(.text+0x63): undefined reference to `pthread_join'
+collect2: error: ld returned 1 exit status
+make[4]: *** [CMakeFiles/cmTC_d23a5.dir/build.make:87: cmTC_d23a5] Error 1
+make[4]: Leaving directory '/home/ras/catkin_ws/build/ceres_catkin/ceres_src-prefix/src/ceres_src-build/CMakeFiles/CMakeTmp'
+make[3]: *** [Makefile:121: cmTC_d23a5/fast] Error 2
+make[3]: Leaving directory '/home/ras/catkin_ws/build/ceres_catkin/ceres_src-prefix/src/ceres_src-build/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+#include <pthread.h>
+
+void* test_func(void* data)
+{
+  return data;
+}
+
+int main(void)
+{
+  pthread_t thread;
+  pthread_create(&thread, NULL, test_func, NULL);
+  pthread_detach(thread);
+  pthread_join(thread, NULL);
+  pthread_atfork(NULL, NULL, NULL);
+  pthread_exit(NULL);
+
+  return 0;
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/ras/catkin_ws/build/ceres_catkin/ceres_src-prefix/src/ceres_src-build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_673b2/fast && make[3]: Entering directory '/home/ras/catkin_ws/build/ceres_catkin/ceres_src-prefix/src/ceres_src-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_673b2.dir/build.make CMakeFiles/cmTC_673b2.dir/build
+make[4]: Entering directory '/home/ras/catkin_ws/build/ceres_catkin/ceres_src-prefix/src/ceres_src-build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_673b2.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_673b2.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_673b2
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_673b2.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_673b2.dir/CheckFunctionExists.c.o  -o cmTC_673b2  -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[4]: *** [CMakeFiles/cmTC_673b2.dir/build.make:87: cmTC_673b2] Error 1
+make[4]: Leaving directory '/home/ras/catkin_ws/build/ceres_catkin/ceres_src-prefix/src/ceres_src-build/CMakeFiles/CMakeTmp'
+make[3]: *** [Makefile:121: cmTC_673b2/fast] Error 2
+make[3]: Leaving directory '/home/ras/catkin_ws/build/ceres_catkin/ceres_src-prefix/src/ceres_src-build/CMakeFiles/CMakeTmp'
+
+
+
+Determining if the function cheev_ exists failed with the following output:
+Change Dir: /home/ras/catkin_ws/build/ceres_catkin/ceres_src-prefix/src/ceres_src-build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_aee04/fast && make[3]: Entering directory '/home/ras/catkin_ws/build/ceres_catkin/ceres_src-prefix/src/ceres_src-build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_aee04.dir/build.make CMakeFiles/cmTC_aee04.dir/build
+make[4]: Entering directory '/home/ras/catkin_ws/build/ceres_catkin/ceres_src-prefix/src/ceres_src-build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_aee04.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=cheev_   -o CMakeFiles/cmTC_aee04.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_aee04
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_aee04.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=cheev_    -rdynamic CMakeFiles/cmTC_aee04.dir/CheckFunctionExists.c.o  -o cmTC_aee04  /usr/lib/x86_64-linux-gnu/libf77blas.so /usr/lib/x86_64-linux-gnu/libatlas.so 
+/usr/bin/ld: CMakeFiles/cmTC_aee04.dir/CheckFunctionExists.c.o: in function `main':
+CheckFunctionExists.c:(.text+0x14): undefined reference to `cheev_'
+collect2: error: ld returned 1 exit status
+make[4]: *** [CMakeFiles/cmTC_aee04.dir/build.make:89: cmTC_aee04] Error 1
+make[4]: Leaving directory '/home/ras/catkin_ws/build/ceres_catkin/ceres_src-prefix/src/ceres_src-build/CMakeFiles/CMakeTmp'
+make[3]: *** [Makefile:121: cmTC_aee04/fast] Error 2
+make[3]: Leaving directory '/home/ras/catkin_ws/build/ceres_catkin/ceres_src-prefix/src/ceres_src-build/CMakeFiles/CMakeTmp'
+
+
+

@@ -1,0 +1,8 @@
+prefix=/home/ras/catkin_ws/install
+
+Name: sabertooth_ctrl
+Description: Description of sabertooth_ctrl
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: message_runtime
