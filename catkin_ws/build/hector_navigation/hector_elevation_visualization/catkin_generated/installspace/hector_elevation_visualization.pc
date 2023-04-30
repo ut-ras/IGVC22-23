@@ -1,8 +1,0 @@
-prefix=/home/ras/catkin_ws/install
-
-Name: hector_elevation_visualization
-Description: Description of hector_elevation_visualization
-Version: 0.0.0
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib 
-Requires: dynamic_reconfigure hector_elevation_msgs hector_map_tools roscpp tf visualization_msgs

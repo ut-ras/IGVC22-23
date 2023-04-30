@@ -1,3 +1,0 @@
-repository='https://ceres-solver.googlesource.com/ceres-solver'
-module=''
-tag='origin'
