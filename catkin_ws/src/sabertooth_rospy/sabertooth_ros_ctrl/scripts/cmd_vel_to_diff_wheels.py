@@ -38,8 +38,6 @@ class CmdVelToMotors:
         self.cmd_msg_str = String()  # object for int32 message
 
         # constants (physical properties of the robot)
-        # self.WHEEL_RADIUS = 0.06096  # radius of wheels (meters)
-        # self.WHEEL_SEPARATION = 0.31  # width of the robot (meters)
         self.WHEEL_RADIUS = 0.1016  # radius of wheels (meters)
         self.WHEEL_SEPARATION = 0.69  # width of the robot (meters)   # WHEEL BASE -- NEEDED
 
