@@ -4,7 +4,7 @@
 
   <include file="$(find pointcloud_to_laserscan)/launch/sample_node.launch"/>
 
-  <node pkg="tf" type="static_transform_publisher" name="camera_to_base_link" args="-0.5 0 1.2 0 0 0 camera base_link 1"/>
+  <node pkg="tf" type="static_transform_publisher" name="camera_to_base_link" args="0.5 0 1.2 0 0 0 1 base_link camera 100"/>
 <!--   <group ns="ira_laser_tools"> -->
     <!-- Wait for sample_node to start before launching laserscan_multi_merger -->
 <!--     <node pkg="rospy" type="wait_for_message.py" name="wait_for_sample_node" args="/scan std_msgs/LaserScan"/> -->
