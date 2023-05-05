@@ -1,7 +1,6 @@
 # sabertooth_rospy
 
-ROS node to control a diff-drive robot with a sabertooth motor controller with Teleop_twist_joy node
-Tested with Xbox 360, Logitech F310 controllers
+ROS node to control a diff-drive robot with a sabertooth motor controller.
 
 ### Downloading and Running
 ---
