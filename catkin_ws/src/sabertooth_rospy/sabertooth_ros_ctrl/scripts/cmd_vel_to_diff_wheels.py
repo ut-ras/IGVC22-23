@@ -61,7 +61,7 @@ class CmdVelToMotors:
         rospy.loginfo("calc commands: w_l: %d, w_r:%d", self.w_l, self.w_r)
 
         # map values obtained above between [-70 , 70] out of [-100,100]
-        # FOR MAX_VEL_X = 1.5 M/S AND MAX_VEL_THETA = 1.0 rad/s (cofigured in local planner for move_base):
+        # FOR MAX_VEL_X = 1.5 M/S AND MAX_VEL_THETA = 1.0 rad/s (configured in local planner for move_base):
         # values calculated above are [-18, 18] --> map to [-99, 99]
         # Adjust in_min, in_max, out_min, outmax_max for different max_vel and max_theta (from diff drive eqn)
         self.w_l = self.map_val(self.w_l, -18, 18, -99, 99)
