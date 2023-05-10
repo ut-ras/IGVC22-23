@@ -1,15 +1,21 @@
+// Slave Device
+
 #include <SabertoothSimplified.h>
 #include <Wire.h>
 
 SabertoothSimplified ST;
 
 
+// Joysticks
 #define CH2 5
 #define CH3 6
-#define CH5 9 // Added
-#define CH6 11
-#define BIAS 10
+// Switchs, could select switchs through the RC Settigns menu. 
+#define CH5 9 // SWA
+#define CH6 11 // SWD
+
+#define BIAS 10 // Noise bias rejection 
 #define P_S_R 2 // pin select receive 0 for left vcc rail for right
+#define BUFFER_SIZE 10
 
 typedef struct RECEIVER
 {
@@ -18,8 +24,65 @@ typedef struct RECEIVER
 
 }RECEIVER;
 
-RECEIVER R_V; // received values
+/*
+FIFO implementation for smoothing motor commands.
+*/
+class MotorFIFO {
+private:
+  int leftMotorBuffer[BUFFER_SIZE];
+  int rightMotorBuffer[BUFFER_SIZE];
+  int currentIndex = 0;
+  int itemCount = 0;
 
+public:
+  MotorFIFO() {
+    for (int i = 0; i < BUFFER_SIZE; i++) {
+      leftMotorBuffer[i] = 0;
+      rightMotorBuffer[i] = 0;
+    }
+  }
+
+  void insertVelocities(int leftVelocity, int rightVelocity) {
+    if (itemCount < BUFFER_SIZE) {
+      leftMotorBuffer[currentIndex] = leftVelocity;
+      rightMotorBuffer[currentIndex] = rightVelocity;
+      currentIndex = (currentIndex + 1) % BUFFER_SIZE;
+      itemCount++;
+    } else {
+      // Buffer is full, shift the data
+      for (int i = 1; i < BUFFER_SIZE; i++) {
+        leftMotorBuffer[i - 1] = leftMotorBuffer[i];
+        rightMotorBuffer[i - 1] = rightMotorBuffer[i];
+      }
+      leftMotorBuffer[BUFFER_SIZE - 1] = leftVelocity;
+      rightMotorBuffer[BUFFER_SIZE - 1] = rightVelocity;
+    }
+  }
+
+  float getLeftMotorAverage() {
+    int sum = 0;
+
+    for (int i = 0; i < itemCount; i++) {
+      sum += leftMotorBuffer[i];
+    }
+
+    return static_cast<float>(sum) / itemCount;
+  }
+
+  float getRightMotorAverage() {
+    int sum = 0;
+
+    for (int i = 0; i < itemCount; i++) {
+      sum += rightMotorBuffer[i];
+    }
+
+    return static_cast<float>(sum) / itemCount;
+  }
+};
+
+
+RECEIVER R_V; // received values
+MotorFIFO S_MOTOR; // Smoothing motor
 int ch2Value = 0;
 int ch3Value = 0;
 bool ch5Value = 0;
@@ -96,9 +159,7 @@ if(!ch5Value) // Emergency switch
   {
   //  Serial.println("LM: " + (String) R_V.LEFT + "RM: " + (String) R_V.RIGHT);
     Send_To_Motors(R_V.LEFT,R_V.RIGHT);
-    
   }
- 
 }
 else
 {
@@ -110,10 +171,11 @@ else
 
 void Send_To_Motors(int LEFT, int RIGHT)
 {
+      S_MOTOR.insertVelocities(LEFT,RIGHT);
        // Serial.println("Wrting to motor ...");
        // Drive the motors based on the channel values
-      if (abs(LEFT) >= BIAS) {
-        ST.motor(1, LEFT);
+      if (abs(S_MOTOR.getLeftMotorAverage()) >= BIAS) {
+        ST.motor(1, (int) S_MOTOR.getLeftMotorAverage());
       //  Serial.print(" | Motor 1 power: ");
       //  Serial.print(ch3Value);
       } else {
@@ -121,19 +183,19 @@ void Send_To_Motors(int LEFT, int RIGHT)
      //   Serial.print(" | Motor 1 power: 0");
       }
     
-      if (abs(RIGHT) >= BIAS) {
-        ST.motor(2, RIGHT);
+      if (abs(S_MOTOR.getRightMotorAverage()) >= BIAS) {
+        ST.motor(2, (int) S_MOTOR.getRightMotorAverage());
       //  Serial.print(" | Motor 2 power: ");
        // Serial.print(ch2Value);
       } else {
         ST.motor(2, 0);
     //    Serial.print(" | Motor 2 power: 0");
       }
-      delay(10);
+    //  delay(1);
     //  Serial.println(); // Print a new line to improve readability
 }
 
-void receiveEvent(int howMany) {
+void receiveEvent(int howMany) { // I2C communication to receive ROS Velocity vectors
   // read the motor speeds from the master
   if (howMany >= 2) {
     motor1_speed = Wire.read();    // receive byte as an integer
