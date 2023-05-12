@@ -165,6 +165,7 @@ else
 {
     ST.motor(1, 0);
     ST.motor(2, 0);
+    S_MOTOR.insertVelocities(0,0); // Fill buffer with 0, for a full stop when regaining manual control
 }
  
 }
