@@ -2,6 +2,9 @@
 
 
 ## Current Code
+WORKSPACE IS IN CATKIN_WS - build and run instructions are there also
+
+
 Most updated code is in the WIP Scripts folder. Find old code in the old folder. 
 
 ## Dependencies
