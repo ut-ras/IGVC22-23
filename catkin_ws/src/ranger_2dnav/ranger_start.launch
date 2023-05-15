@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- Launch serial comms with Arduino -->
+    <node name="serial_node" pkg="rosserial_python" type="serial_node.py" output="screen">
+        <!-- Port Arduino is connected to: ls /dev/tty* -->
+        <param name="port" value="/dev/ttyUSB0"/>  
+        <!-- Baud rate -->
+        <param name="baud" value="9600"/>
+    </node> 
+    <!-- Start LIDAR and SLAM -->
+    <include file="$(find ranger_2dnav)/ranger_hector_slam.launch"/>
+    <!-- Start path planning framework -->
+    <include file="$(find ranger_2dnav)/move_base.launch"/>
+    <!-- Convert raw velocities to differential wheel inputs -->
+    <node name="CmdVelToMotors" pkg="sabertooth_ctrl" type="cmd_vel_to_diff_wheels.py" output="screen"/>
+    <!-- Begin sending goals -->
+    <include file="$(find ranger_actionlib)/launch/ranger_actionlib.launch"/>
+
+</launch>

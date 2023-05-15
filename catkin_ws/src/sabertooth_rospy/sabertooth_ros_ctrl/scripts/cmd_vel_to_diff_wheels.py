@@ -38,8 +38,10 @@ class CmdVelToMotors:
         self.cmd_msg_str = String()  # object for int32 message
 
         # constants (physical properties of the robot)
+        # self.WHEEL_RADIUS = 0.06096  # radius of wheels (meters)
+        # self.WHEEL_SEPARATION = 0.31  # width of the robot (meters)
         self.WHEEL_RADIUS = 0.1016  # radius of wheels (meters)
-        self.WHEEL_SEPARATION = 0.69  # width of the robot (meters)   # WHEEL BASE -- NEEDED
+        self.WHEEL_SEPARATION = 0.4  # wheel base (meter); distance between drive wheels
 
 
     def cmd_vel_cb(self, vel):
@@ -58,12 +60,11 @@ class CmdVelToMotors:
         )
         rospy.loginfo("calc commands: w_l: %d, w_r:%d", self.w_l, self.w_r)
 
-        # map values obtained above between [-70 , 70] out of [-100,100]
-        # FOR MAX_VEL_X = 1.5 M/S AND MAX_VEL_THETA = 1.0 rad/s (configured in local planner for move_base):
-        # values calculated above are [-18, 18] --> map to [-99, 99]
+        # FOR MAX_VEL_X = 2.25 M/S AND MAX_VEL_THETA = 1.0 rad/s:
+        # values calculated above are [-24, 24] --> map to [-99, 99]
         # Adjust in_min, in_max, out_min, outmax_max for different max_vel and max_theta (from diff drive eqn)
-        self.w_l = self.map_val(self.w_l, -18, 18, -99, 99)
-        self.w_r = self.map_val(self.w_r, -18, 18, -99, 99)
+        self.w_l = self.map_val(self.w_l, -17, 17, -99, 99)
+        self.w_r = self.map_val(self.w_r, -17, 17, -99, 99)
 
         rospy.loginfo("mapped commands: w_l: %d, w_r:%d", self.w_l, self.w_r)
 
@@ -76,12 +77,12 @@ class CmdVelToMotors:
 
 
         if rounded_wl < 10:
-            rounded_wl = "00"
+            rounded_wl = "0" + str(rounded_wl)
         else:
             rounded_wl = str(rounded_wl)
 
         if rounded_wr < 10:
-            rounded_wr = "00"
+            rounded_wr = "0" + str(rounded_wr)
         else:
             rounded_wr = str(rounded_wr)
 

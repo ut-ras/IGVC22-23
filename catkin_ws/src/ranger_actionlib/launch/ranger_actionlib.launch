@@ -1,0 +1,4 @@
+<launch>
+    <node name="goal_sender" pkg="ranger_actionlib" type="goal_sender.py" output="screen"/>
+    <node name="nav_actions" pkg="ranger_actionlib" type="nav_actions.py" output="screen"/>
+</launch>

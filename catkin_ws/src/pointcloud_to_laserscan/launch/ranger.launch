@@ -9,6 +9,7 @@
     <!-- Wait for sample_node to start before launching laserscan_multi_merger -->
 <!--     <node pkg="rospy" type="wait_for_message.py" name="wait_for_sample_node" args="/scan std_msgs/LaserScan"/> -->
     <!-- Launch laserscan_multi_merger -->
-<!--     <include file="$(find ira_laser_tools)/launch/laserscan_multi_merger.launch"/> -->
+  <include file="$(find ira_laser_tools)/launch/laserscan_multi_merger.launch"/>
 <!--   </group> -->
+  <include file="$(find ranger_2dnav)/launch/ranger_start.launch"/>
 </launch>

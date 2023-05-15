@@ -5,7 +5,7 @@
 	<param name="destination_frame" value="cart_frame"/>
 	<param name="cloud_destination_topic" value="/merged_cloud"/>
 	<param name="scan_destination_topic" value="/scan_multi"/>
-	<param name="laserscan_topics" value ="/scansx /scandx" /> <!-- LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE -->
+	<param name="laserscan_topics" value ="/scan sick_mrs_1xxx/scan" /> <!-- LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE -->
 	<param name="angle_min" value="-2.0"/>
 	<param name="angle_max" value="2.0"/>
 	<param name="angle_increment" value="0.0058"/>
