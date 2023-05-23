@@ -11,5 +11,5 @@
     <!-- Launch laserscan_multi_merger -->
   <include file="$(find ira_laser_tools)/launch/laserscan_multi_merger.launch"/>
 <!--   </group> -->
-  <include file="$(find ranger_2dnav)/launch/ranger_start.launch"/>
+  <include file="$(find ranger_2dnav)/ranger_start.launch"/>
 </launch>
