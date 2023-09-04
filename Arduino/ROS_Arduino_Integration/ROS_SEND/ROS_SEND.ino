@@ -43,15 +43,17 @@ void motor_cmd_str_callback(const std_msgs::String& msg)
     // scale from -127 to 127 
      ch3Value = 1.27 * cmd_left;
      ch2Value = 1.27 * cmd_right; 
-
-//    debugging: COMMENT OUT FOR FASTER PERFORMANCE
+  
+  // debugging only: COMMENT OUT NEXT 2 LINES FOR FASTER PERFORMANCE
     String val_str = String(ch3Value) + " " + String(ch2Value);
     nh.loginfo(val_str.c_str()); 
-//    Send_To_Motors(ch3Value, ch2Value);
+
+  // Send computed commands to other Arduino (connected to motor driver) over I2C
+   Send_To_Motors(ch3Value, ch2Value);
 
  }
 
-// Subscriper to ROS topic sending differential wheel velocity commands as string 
+// Subscribe to ROS topic sending differential wheel velocity commands as string 
 ros::Subscriber<std_msgs::String> sub("/motor_cmd_str", &motor_cmd_str_callback);
 
 void setup()
