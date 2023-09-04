@@ -18,7 +18,7 @@ launch file called ranger_start.launch. It contains the ROS move_base launch, al
 - sabertooth_rospy: This package (specifically the CmdVelToMotors node) subscribes to the /cmd_vel topic and converts the velocity commands to differential wheel velocity inputs (based on robot geometry) and publishes this information in a special string format, which is received by a ROS subscriber on an Arduino.
 
 
-*Camera*
+*Camera - IN PROGRESS*
 
 Running the code
 (must have camera connected. This is for ROS Noetic)
