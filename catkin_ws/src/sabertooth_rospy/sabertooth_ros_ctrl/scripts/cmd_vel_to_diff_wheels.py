@@ -86,6 +86,7 @@ class CmdVelToMotors:
         else:
             rounded_wr = str(rounded_wr)
 
+        # Motor cmd str in format {LL}{RR}{L_sign}{R_sign}
         self.cmd_msg_str = str(rounded_wl + rounded_wr + left_sign + right_sign)
         
         for i in range(3):
