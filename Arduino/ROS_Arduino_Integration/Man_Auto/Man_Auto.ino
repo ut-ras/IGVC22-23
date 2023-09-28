@@ -9,7 +9,7 @@ SabertoothSimplified ST;
 // Joysticks
 #define CH2 5
 #define CH3 6
-// Switchs, could select switchs through the RC Settigns menu. 
+// Switches, could select switches through the RC Settings menu. 
 #define CH5 9 // SWA
 #define CH6 11 // SWD
 
@@ -96,26 +96,18 @@ int motor2_speed = 0;
 int ROS_L = 0;
 int ROS_R = 0;
 
-int readChannel(int channelInput, int minLimit, int maxLimit, int defaultValue){
-  int ch = pulseIn(channelInput, HIGH, 30000);
-  if (ch < 100) return defaultValue;
-  return (int) map(ch, 1000, 2000, minLimit, maxLimit);
-}
 
-bool readSwitch(byte channelInput, bool defaultValue){
-  int intDefaultValue = (defaultValue)? 100: 0;
-  int ch = readChannel(channelInput, 0, 100, intDefaultValue);
-  return (ch > 50);
-}
 
-void Send_To_Motors(int LEFT, int RIGHT);
-void receiveEvent(int byteCount);
+int readChannel(int channelInput, int minLimit, int maxLimit, int defaultValue); // reads values from inputted channel and sets it within a range
+bool readSwitch(byte channelInput, bool defaultValue); // checks whether the robot is controlled manually or through ROS
+void Send_To_Motors(int LEFT, int RIGHT); // sends values to motors using FIFO buffer
+void receiveEvent(int byteCount);         // event handler for incoming ros commands from the master arduino
 
 void setup(){
  SabertoothTXPinSerial.begin(9600);
  
 
-  Wire.begin(receiverAddress);                // join I2C bus with address 8
+  Wire.begin(receiverAddress);  // join I2C bus with address 8
   Wire.onReceive(receiveEvent); // register receive event handler
  // Serial.begin(115200);
 
@@ -134,7 +126,7 @@ void loop() {
   ch5Value = readSwitch(CH5, false);
   ch6Value = readSwitch(CH6, false);
   // Output the values to the Serial Monitor
- // Serial.print("\n ");
+  // Serial.print("\n ");
  /*
  Serial.print("Ch2: ");
   Serial.print(ch2Value);
@@ -147,7 +139,6 @@ void loop() {
   Serial.println();
 
 */
-
  
 if(!ch5Value) // Emergency switch
 {
@@ -168,6 +159,18 @@ else
     S_MOTOR.insertVelocities(0,0); // Fill buffer with 0, for a full stop when regaining manual control
 }
  
+}
+
+int readChannel(int channelInput, int minLimit, int maxLimit, int defaultValue){
+  int ch = pulseIn(channelInput, HIGH, 30000);
+  if (ch < 100) return defaultValue;                     // should this be 1000
+  return (int) map(ch, 1000, 2000, minLimit, maxLimit);
+}
+
+bool readSwitch(byte channelInput, bool defaultValue){
+  int intDefaultValue = (defaultValue)? 100: 0;
+  int ch = readChannel(channelInput, 0, 100, intDefaultValue);
+  return (ch > 50);
 }
 
 void Send_To_Motors(int LEFT, int RIGHT)
