@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
 <launch>
+     <!-- Laser scan on topic scan (with updated frequency, see below) -->
+    <remap from="sick_mrs_1xxx/scan" to="raw_scan" />
+    <remap from="cloud" to="points2" />
+
     <arg name="hostname" default="169.254.137.36"/>
     <node name="sick_mrs_1xxx" pkg="sick_scan" type="sick_generic_caller" respawn="false" output="screen">
         <param name="scanner_type" type="string" value="sick_mrs_1xxx"/>
@@ -11,20 +15,48 @@
         <param name="hostname" type="string" value="$(arg hostname)"/>
         <param name="port" type="string" value="2112"/>
         <param name="timelimit" type="int" value="5"/>
+
+       <!-- Optional range filter configuration: If the range of a scan point is less than range_min or greater than range_max, the point can be filtered. -->
+        <!-- Depending on parameter range_filter_handling, the following filter can be applied for points with a range not within [range_min, range_max],   -->
+        <!-- see enumeration RangeFilterResultHandling in range_filter.h:                                           -->
+        <!--   0: RANGE_FILTER_DEACTIVATED,  do not apply range filter (default)                                    -->
+        <!--   1: RANGE_FILTER_DROP,         drop point, if range is not within [range_min, range_max]              -->
+        <!--   2: RANGE_FILTER_TO_ZERO,      set range to 0, if range is not within [range_min, range_max]          -->
+        <!--   3: RANGE_FILTER_TO_RANGE_MAX, set range to range_max, if range is not within [range_min, range_max]  -->
+        <!--   4: RANGE_FILTER_TO_FLT_MAX,   set range to FLT_MAX, if range is not within [range_min, range_max]    -->
+        <!--   5: RANGE_FILTER_TO_NAN        set range to NAN, if range is not within [range_min, range_max]        -->
+        <!-- Note: Range filter applies only to Pointcloud messages, not to LaserScan messages.                     -->
+        <!-- Using range_filter_handling 4 or 5 requires handling of FLT_MAX and NAN values in an application.      -->
+        <param name="range_min" type="double" value="0.05"/>
+        <param name="range_max" type="double" value="60.0"/>
+        <param name="range_filter_handling" type="int" value="1"/>  
+
+        <param name="imu_enable" type="bool" value="True"/>
+        <param name="imu_enable_additional_info" type="bool" value="True"/> 
+        <param name="ang_res" type="double" value="0" />     <!-- Supported values are "0.0625", "0.125" and "0.25". Default: "0", i.e. do not set or overwrite angular resolution and scan frequency -->
+        <param name="scan_freq" type="double" value="0" /> <!-- Supported values are "12.5", "25" and "50". Default: "0", i.e. do not set or overwrite angular resolution and scan frequency -->
     </node>
-    <!-- Transformation to see cloud-data in rviz -->
+
+      <!-- Reduce frequency of /scan messages to ~18 Hz (set 30) for improved Cartographer performance -->
+      <node pkg="topic_tools" type="throttle" name="throttle" args="messages raw_scan 30.0 scan"/>
+
+    <!-- Transformations to see cloud-data in rviz -->
     <node pkg="tf" type="static_transform_publisher" name="laser_baselaser" args="0 0 0 0 0 0 1 base_laser laser 100"/>
+
+    <node pkg="tf" type="static_transform_publisher" name="cloud_baselaser" args="0 0 0 0 0 0 1 base_laser cloud 100"/>
+
     <!-- Transformation to prepare SLAM -->
     <node pkg="tf" type="static_transform_publisher" name="laser_layer_0_first_echo_base_laser"
           args="0 0 0 0 0 0 1 base_laser laser_POS_000_DIST1 100"/>
 
     <node pkg="tf" type="static_transform_publisher" name="base_laser_to_base_link"
-          args="0.2 0 0 0 0 0 1 base_link base_laser  100"/>
+          args="0 0 0 0 0 0 1 base_link base_laser  100"/>
 
     <node pkg="tf" type="static_transform_publisher" name="base_link_to_base_footprint"
-          args="0 0 0.1 0 0 0 1 base_footprint base_link  100"/>
+          args="0 0 0 0 0 0 1 base_footprint base_link  100"/>
 
-    <node pkg="tf" type="static_transform_publisher" name="base_footprint_to_odom"
+      <!-- base link to odom (disable if using ekf or ukf which publishes this tf?) -->
+    <node pkg="tf" type="static_transform_publisher" name="base_footprint_to_odom"    
           args="0 0 0 0 0 0 1 odom base_footprint 100"/>
 
     <node pkg="tf" type="static_transform_publisher" name="odom_to_scanmatcher"
@@ -33,13 +65,16 @@
     <arg name="tf_map_scanmatch_transform_frame_name" default="/scanmatcher_frame"/>
     <arg name="base_frame" default="base_link"/>
     <arg name="odom_frame" default="base_link"/>
-    <arg name="pub_map_odom_transform" default="true"/>
+    <!-- False since Cartographer will publish this tf -->
+    <arg name="pub_map_odom_transform" default="false"/>
     <arg name="scan_subscriber_queue_size" default="5"/>
-    <arg name="scan_topic" default="/scan_multi"/>
+    <arg name="scan_topic" default="scan"/>
     <arg name="map_size" default="2048"/>
+    <!-- Obtain visual odometry from Hector SLAM -->
     <arg name="pub_odometry" default="true"/>
-    
-    <!-- <remap from="scanmatch_odom" to="odom" /> -->
+
+    <!-- Remap /map produced by Hector since we will use map produced by Cartographer -->
+    <remap from="map" to="map_hector" />
 
     <node pkg="hector_mapping" type="hector_mapping" name="hector_mapping" output="screen">
         <!-- Publish odometry -->
@@ -69,19 +104,11 @@
         <param name="advertise_map_service" value="true"/>
         <param name="scan_subscriber_queue_size" value="$(arg scan_subscriber_queue_size)"/>
         <param name="scan_topic" value="$(arg scan_topic)"/>
-        <!-- Debug parameters -->
-        <!--
-          <param name="output_timing" value="false"/>
-          <param name="pub_drawings" value="true"/>
-          <param name="pub_debug_output" value="true"/>
-        -->
+
         <param name="tf_map_scanmatch_transform_frame_name" value="$(arg tf_map_scanmatch_transform_frame_name)"/>
     </node>
-    <!-- <node pkg="tf" type="static_transform_publisher" name="map_nav_broadcaster" args="0 0 0 0 0 0 map nav 100"/> -->
-    <!-- <node pkg="tf" type="static_transform_publisher" name="base_to_laser_broadcaster" args="0 0 0 0 0 0 base_link laser 100"/> -->
-    <!-- <node pkg="tf" type="static_transform_publisher" name="base_to_laser_broadcaster" args="0 0 0 0 0 0 base_link cloud 100"/> -->
-    <!-- <node pkg="tf" type="static_transform_publisher" name="base_to_laser_broadcaster" args="0 0 0 0 0 0 base_link laser_POS_000_DIST1 100"/> -->
-    <arg name="rviz" default="true"/>
+
+    <!-- <arg name="rviz" default="true"/>
     <arg name="rviz_file" default="$(find sick_scan)/launch/rviz/hector.rviz"/>
-    <node pkg="rviz" type="rviz" name="$(anon rviz)" args="-d $(arg rviz_file)" output="screen" if="$(arg rviz)"/>
+    <node pkg="rviz" type="rviz" name="$(anon rviz)" args="-d $(arg rviz_file)" output="screen" if="$(arg rviz)"/> -->
 </launch>
