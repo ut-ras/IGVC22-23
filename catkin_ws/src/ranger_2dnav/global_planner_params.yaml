@@ -1,0 +1,8 @@
+BaseGlobalPlanner:
+
+  # http://wiki.ros.org/global_planner
+
+  allow_unknown: true               # allow the planner to create plans that traverse unknown space (i.e. beyond current map)
+  default_tolerance: 0.02           # maximum allowable distance from goal (meters)
+  use_dijkstra: false               # false = use A*
+  use_grid_path: false              # If true, create a path that follows  grid boundaries. Else, use a gradient descent method.
