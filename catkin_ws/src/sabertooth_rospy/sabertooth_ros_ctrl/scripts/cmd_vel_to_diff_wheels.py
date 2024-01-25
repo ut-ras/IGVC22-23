@@ -41,7 +41,7 @@ class CmdVelToMotors:
         # self.WHEEL_RADIUS = 0.06096  # radius of wheels (meters)
         # self.WHEEL_SEPARATION = 0.31  # width of the robot (meters)
         self.WHEEL_RADIUS = 0.1016  # radius of wheels (meters)
-        self.WHEEL_SEPARATION = 0.4  # wheel base (meter); distance between drive wheels
+        self.WHEEL_SEPARATION = 0.4  # wheel axle length (meters)
 
 
     def cmd_vel_cb(self, vel):
@@ -50,7 +50,7 @@ class CmdVelToMotors:
         self.lin_speed = vel.linear.x
         self.ang_speed = vel.angular.z
 
-        # convert linear and angular inputs to left and right wheel velocities
+        # convert linear and angular inputs to left and right wheel angular velocities 
         self.w_l = ((2 * self.lin_speed) - (self.ang_speed * self.WHEEL_SEPARATION)) / (
             2.0 * self.WHEEL_RADIUS
         )
