@@ -1,28 +1,20 @@
 local_costmap:
-  # global_frame: map
-  # robot_base_frame: base_link
-  # update_frequency: 3.0
-  # publish_frequency: 2.0
-  # static_map: false
-  # rolling_window: true
-  # width: 6.0
-  # height: 6.0
-  # resolution: 0.05
 
   global_frame: map
-  # robot_base_frame: base_footprint
-  robot_base_frame: base_link
+  robot_base_frame: base_footprint
+  # robot_base_frame: base_link
 
   update_frequency: 3.0
   publish_frequency: 3.0
-  transform_tolerance: 0.5
+  transform_tolerance: 1.0
 
   track_unknown_space: false
-
-  static_map: false  
   rolling_window: true
-  # width: 3
-  # height: 3
-  width: 6
-  height: 6
+  # need to increase these for our robot: (e.g. 6x6)
+  width: 3
+  height: 3
   resolution: 0.05
+  # added:
+  plugins:
+    - {name: inflation_layer,        type: "costmap_2d::InflationLayer"}
+    - {name: obstacle_layer,      type: "costmap_2d::ObstacleLayer"}
