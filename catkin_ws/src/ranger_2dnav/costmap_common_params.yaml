@@ -1,47 +1,29 @@
-# obstacle_range: 3.0
-# raytrace_range: 3.5
-# footprint: [[0.508, 0.3429],
-#             [-0.508, 0.3429],
-#             [-0.508, -0.3429],
-#             [0.508, -0.3429]]
-# # inflation_radius: 0.625
-# footprint: [[0.07, 0.09],
-#             [-0.07, 0.09],
-#             [-0.07, -0.09],
-#             [0.07, -0.09]]
-# inflation_radius: 0.125
+# RAS RANGER
+# obstacle_range: 10.0
+# raytrace_range: 10.5
 
-# observation_sources: laser_scan_sensor   # add camera here too 
+# footprint: [[0.2, 0.3429],
+#             [-0.75, 0.3429],
+#             [-0.75, -0.3429],
+#             [0.2, -0.3429]]
+# footprint_padding: 0.1
 
-# # laser_scan_sensor: {sensor_frame: base_laser, data_type: LaserScan, topic: sick_mrs_1xxx/scan, marking: true, clearing: true}
-# laser_scan_sensor: {sensor_frame: base_scan, data_type: LaserScan, topic: /scan, marking: true, clearing: true}
+# inflation_radius: 0.65
+# cost_scaling_factor: 3.0
 
-# # camera_sensor: {sensor_frame: camera_frame, data_type: PointCloud2, topic: /topic, marking: true, clearing: true}
+# map_type: costmap
+# observation_sources: scan
+# scan: {sensor_frame: base_laser, data_type: LaserScan, topic: sick_mrs_1xxx/scan, marking: true, clearing: true}
 
-# obstacle_range: 5.0
-# raytrace_range: 5.5
+# turtlebot3 burger 
+obstacle_range: 3.0
+raytrace_range: 3.5
 
-obstacle_range: 10.0
-raytrace_range: 10.5
+footprint: [[-0.105, -0.105], [-0.105, 0.105], [0.041, 0.105], [0.041, -0.105]]
 
-# footprint: [[-0.105, -0.105], [-0.105, 0.105], [0.041, 0.105], [0.041, -0.105]]
-
-# footprint: [[0.508, 0.3429],
-#             [-0.508, 0.3429],
-#             [-0.508, -0.3429],
-#             [0.508, -0.3429]]
-
-footprint: [[0.2, 0.3429],
-            [-0.75, 0.3429],
-            [-0.75, -0.3429],
-            [0.2, -0.3429]]
-footprint_padding: 0.1
-#robot_radius: 0.105
-
-inflation_radius: 0.65
+inflation_radius: 1.0
 cost_scaling_factor: 3.0
 
 map_type: costmap
 observation_sources: scan
-# scan: {sensor_frame: base_scan, data_type: LaserScan, topic: /scan, marking: true, clearing: true}
-scan: {sensor_frame: base_laser, data_type: LaserScan, topic: sick_mrs_1xxx/scan, marking: true, clearing: true}
+scan: {sensor_frame: base_scan, data_type: LaserScan, topic: scan, marking: true, clearing: true}
