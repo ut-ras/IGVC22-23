@@ -8,11 +8,8 @@ The received data can be interpreted as (left_motor_cmd, right_motor_cmd)
 The script transfers this info to Arduino #2 over I2C
  **/
 
-
 #include <Wire.h>
-#include <std_msgs/Int32.h>
-#include <std_msgs/String.h>
-#include <sabertooth_ctrl/msg/MotorStr.h>
+
 
 #define TA 8 // transmition address
 #define P_S 6 // Pin select low for left high for right
