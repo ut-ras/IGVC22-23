@@ -1,10 +1,33 @@
-// Slave Device
+/** 
+FUNCTIONALITY:
 
-#include <SabertoothSimplified.h>
+THIS SCRIPT OPERATES ON ARDUINO #2 (connected to Arduino #1over I2C and Sabertooth motor driver over serial and receiver)
+
+This script reads the value of a switch on the controller 
+Depending on the state of the switch, we determine manual vs. autonomous control 
+
+Case 1: Manual Control
+- Continue to receive data over I2C and update global var, but ignore the received motor commands
+- If the emergency stop switch on the controller is not toggled:
+  -- read the value of the joysticks on the controller 
+  -- send values to motor driver over serial 
+- Else:
+  - send 0 values (i.e. stop) to motor driver
+
+Case 2: Autonomous Control
+- Use values received ovr I2C 
+- If the emergency stop switch on the controller is not toggled:
+  -- use the current value of the global variable (see code) and send to motor driver over serial 
+  -- send values to motor driver over serial 
+- Else:
+  - send 0 values (i.e. stop) to motor driver
+
+ **/
+
+#include <SabertoothSimplified.h>       // Sabertooth library 
 #include <Wire.h>
 
 SabertoothSimplified ST;
-
 
 // Joysticks
 #define CH2 5
@@ -13,10 +36,11 @@ SabertoothSimplified ST;
 #define CH5 9 // SWA
 #define CH6 11 // SWD
 
-#define BIAS 10 // Noise bias rejection 
+#define BIAS 10 // Noise bias rejection  
 #define P_S_R 2 // pin select receive 0 for left vcc rail for right
 #define BUFFER_SIZE 10
 
+// custom struct to store autonomous command values for [left, right] motors 
 typedef struct RECEIVER
 {
   int LEFT = 0;
@@ -25,7 +49,7 @@ typedef struct RECEIVER
 }RECEIVER;
 
 /*
-FIFO implementation for smoothing motor commands.
+FIFO implementation for smoothing motor commands. Improves drive controllability & performance.
 */
 class MotorFIFO {
 private:
@@ -81,7 +105,7 @@ public:
 };
 
 
-RECEIVER R_V; // received values
+RECEIVER R_V; // received values; global variable to store the received autonomous motor commands 
 MotorFIFO S_MOTOR; // Smoothing motor
 int ch2Value = 0;
 int ch3Value = 0;
@@ -97,21 +121,17 @@ int ROS_L = 0;
 int ROS_R = 0;
 
 
-
 int readChannel(int channelInput, int minLimit, int maxLimit, int defaultValue); // reads values from inputted channel and sets it within a range
 bool readSwitch(byte channelInput, bool defaultValue); // checks whether the robot is controlled manually or through ROS
 void Send_To_Motors(int LEFT, int RIGHT); // sends values to motors using FIFO buffer
 void receiveEvent(int byteCount);         // event handler for incoming ros commands from the master arduino
 
 void setup(){
- SabertoothTXPinSerial.begin(9600);
+ SabertoothTXPinSerial.begin(9600);      // begin serial comms with sabertooth motor driver 
  
-
   Wire.begin(receiverAddress);  // join I2C bus with address 8
   Wire.onReceive(receiveEvent); // register receive event handler
- // Serial.begin(115200);
 
- // pinMode(P_S_R, INPUT);
   pinMode(CH2, INPUT);
   pinMode(CH3, INPUT);
   pinMode(CH5, INPUT);
@@ -121,11 +141,13 @@ void setup(){
 }
 
 void loop() {
+  // read switch & channel values (functions defined below)
   ch2Value = (int) readChannel(CH2, -126, 126, 0); // right joy stick
   ch3Value = (int) readChannel(CH3, -126, 126, 0); // left joy stick
   ch5Value = readSwitch(CH5, false);
   ch6Value = readSwitch(CH6, false);
-  // Output the values to the Serial Monitor
+  
+  // Output the values to the Serial Monitor (debug)
   // Serial.print("\n ");
  /*
  Serial.print("Ch2: ");
@@ -140,19 +162,19 @@ void loop() {
 
 */
  
-if(!ch5Value) // Emergency switch
+if(!ch5Value) // Emergency switch NOT toggled
 {
   if(!ch6Value) // Manual mode
   {
      Send_To_Motors(ch3Value,ch2Value);
   }
-  else // Auto
+  else // Autonomous mode 
   {
   //  Serial.println("LM: " + (String) R_V.LEFT + "RM: " + (String) R_V.RIGHT);
     Send_To_Motors(R_V.LEFT,R_V.RIGHT);
   }
 }
-else
+else  // Emergency switch toggled ---- STOP motors
 {
     ST.motor(1, 0);
     ST.motor(2, 0);
@@ -161,11 +183,13 @@ else
  
 }
 
+// read channel and return mapped values in range [minLimit, maxLimit]
 int readChannel(int channelInput, int minLimit, int maxLimit, int defaultValue){
   int ch = pulseIn(channelInput, HIGH, 30000);
   if (ch < 100) return defaultValue;                     // should this be 1000
   return (int) map(ch, 1000, 2000, minLimit, maxLimit);
 }
+
 
 bool readSwitch(byte channelInput, bool defaultValue){
   int intDefaultValue = (defaultValue)? 100: 0;
@@ -173,6 +197,8 @@ bool readSwitch(byte channelInput, bool defaultValue){
   return (ch > 50);
 }
 
+
+// send commands to motor over serial
 void Send_To_Motors(int LEFT, int RIGHT)
 {
       S_MOTOR.insertVelocities(LEFT,RIGHT);
@@ -180,7 +206,7 @@ void Send_To_Motors(int LEFT, int RIGHT)
        // Drive the motors based on the channel values
       if (abs(S_MOTOR.getLeftMotorAverage()) >= BIAS) {
         ST.motor(1, (int) S_MOTOR.getLeftMotorAverage());
-      //  Serial.print(" | Motor 1 power: ");
+      //  Serial.print(" | Motor 1 power: ");              // PRINT STATEMENTS FOR DEBUG ONLY (comment out for real operation!!!)
       //  Serial.print(ch3Value);
       } else {
         ST.motor(1, 0);
@@ -196,9 +222,10 @@ void Send_To_Motors(int LEFT, int RIGHT)
     //    Serial.print(" | Motor 2 power: 0");
       }
     //  delay(1);
-    //  Serial.println(); // Print a new line to improve readability
+    //  Serial.println(); // Print a new line to improve readability 
 }
 
+// Receive I2C data from Arduino #1 and update global variable 
 void receiveEvent(int howMany) { // I2C communication to receive ROS Velocity vectors
   // read the motor speeds from the master
   if (howMany >= 2) {
