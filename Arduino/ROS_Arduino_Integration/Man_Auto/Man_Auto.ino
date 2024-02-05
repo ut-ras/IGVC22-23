@@ -1,7 +1,7 @@
 /** 
 FUNCTIONALITY:
 
-THIS SCRIPT OPERATES ON ARDUINO #2 (connected to Arduino #1over I2C and Sabertooth motor driver over serial and receiver)
+THIS SCRIPT OPERATES ON ARDUINO #2 (connected to Arduino #1 over I2C and Sabertooth motor driver over serial and receiver)
 
 This script reads the value of a switch on the controller 
 Depending on the state of the switch, we determine manual vs. autonomous control 
