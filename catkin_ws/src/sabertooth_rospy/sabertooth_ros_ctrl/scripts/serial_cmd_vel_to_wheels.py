@@ -8,7 +8,8 @@ import math
 import serial
 import struct
 
-
+COM = "COM5"
+BAUD = 115200
 
 class CmdVelToMotors:
     """
@@ -67,7 +68,7 @@ class CmdVelToMotors:
         rospy.loginfo("mapped commands: w_l: %d, w_r:%d", self.w_l, self.w_r)
 
         # Open the serial connection (change 'COM1' to the appropriate port)
-        ser = serial.Serial('COM5', baudrate=9600, timeout=1)
+        ser = serial.Serial(COM, BAUD, timeout=10)
 
         # Pack the integers into bytes and send them
         data = struct.pack('ii', self.w_l, self.w_r)
