@@ -1,29 +1,24 @@
-# RAS RANGER
-# obstacle_range: 10.0
-# raytrace_range: 10.5
-
-# footprint: [[0.2, 0.3429],
-#             [-0.75, 0.3429],
-#             [-0.75, -0.3429],
-#             [0.2, -0.3429]]
-# footprint_padding: 0.1
-
-# inflation_radius: 0.65
-# cost_scaling_factor: 3.0
-
-# map_type: costmap
-# observation_sources: scan
-# scan: {sensor_frame: base_laser, data_type: LaserScan, topic: sick_mrs_1xxx/scan, marking: true, clearing: true}
-
 # turtlebot3 burger 
 obstacle_range: 3.0
 raytrace_range: 3.5
 
 footprint: [[-0.105, -0.105], [-0.105, 0.105], [0.041, 0.105], [0.041, -0.105]]
 
-inflation_radius: 1.0
-cost_scaling_factor: 3.0
+# https://wiki.ros.org/costmap_2d/layered
+plugins:
+  - {name: static_layer,    type: "costmap_2d::StaticLayer"}
+  - {name: obstacle_layer,  type: "costmap_2d::ObstacleLayer"}
+  - {name: inflation_layer, type: "costmap_2d::InflationLayer"}
 
-map_type: costmap
-observation_sources: scan
-scan: {sensor_frame: base_scan, data_type: LaserScan, topic: scan, marking: true, clearing: true}
+static_layer:
+  map_topic: /map
+  subscribe_to_updates: true
+
+obstacle_layer:
+  observation_sources: scan   # add more here separated by spaces
+  scan: {sensor_frame: base_scan, data_type: LaserScan, topic: scan, marking: true, clearing: true, 
+  min_obstacle_height: -2.0, max_obstacle_height: 2.0, obstacle_range: 2.5, raytrace_range: 8.5}
+
+inflation_layer:
+  inflation_radius: 1.25  # originally: 1.0
+  cost_scaling_factor: 3.0  # originally: 3.0
