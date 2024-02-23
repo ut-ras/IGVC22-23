@@ -6,8 +6,9 @@
 
 BUILD:
 1. Must have sick_scan_XD installed to work with LIDAR; follow instruction for "Build on Linux ROS1 here" https://github.com/SICKAG/sick_scan_xd/blob/master/INSTALL-ROS1.md#build-on-linux-ros1
-2. Install Hector SLAM: sudo apt-get install ros-kinetic-hector-slam
-3. Clone this 'catkin_ws' and build with 'catkin_make'
+  a. Build from source instead of the preinstalled repos!
+3. Install Hector SLAM: sudo apt-get install ros-kinetic-hector-slam
+4. Clone this 'catkin_ws' and build with 'catkin_make'
 
 PACKAGE INFO:
 - ranger_2dnav:  This package contains all the path-planning contents & the combined all–in-one
