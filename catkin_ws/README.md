@@ -24,6 +24,22 @@ launch file called ranger_start.launch. It contains the ROS move_base launch, al
 Running the code
 (must have camera connected. This is for ROS Noetic)
 
+----------
+Lane Detection (and Pothole detection) using HSV Color Detection
+- The method used to identify lanes from an image of the road uses the following steps:
+1.  OpenCV HSV color filtering to detect road
+2.  Blur image BEFORE using HSV
+3.  Invert results of filter
+
+The result of these transformations produces an image in which the road is colored black, and everything that is not the road (lanes, obstacles and potholes) are colored white.
+
+The range used to identify the gray road color is:
+- [0, 0, 50]
+- [179, 50, 200]
+
+  After the image is generated, we run a for loop to save a list of all the white pixels in the image. This is output to a file called white_pixels.txt.
+
+
 ```roscore
 cd catkin_ws
 source devel/setup.bash
