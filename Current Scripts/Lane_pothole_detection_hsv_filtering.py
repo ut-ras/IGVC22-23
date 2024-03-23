@@ -1,4 +1,5 @@
 # dependencies - opencv-python and numpy
+# will probably need to replace cv2_imshow with cv2.imshow
 
 import cv2
 from PIL import Image as im
