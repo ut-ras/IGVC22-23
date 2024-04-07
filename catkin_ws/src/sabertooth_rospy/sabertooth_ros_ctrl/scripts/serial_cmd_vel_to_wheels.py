@@ -29,6 +29,9 @@ class CmdVelToMotors:
     """
 
     def __init__(self):
+        """
+        Initalizer 
+        """
         # create subscriber for cmd_vel
         self.cmd_vel_sub = rospy.Subscriber(
             "cmd_vel", Twist, self.cmd_vel_cb, queue_size=1
@@ -42,6 +45,10 @@ class CmdVelToMotors:
 
 
     def cmd_vel_cb(self, vel):
+        """
+        This function is executed every time ROS computes a new velocity to be send to Arduino
+        Responsible for serial communication 
+        """
 
         vel_msg = MotorStr()
 
