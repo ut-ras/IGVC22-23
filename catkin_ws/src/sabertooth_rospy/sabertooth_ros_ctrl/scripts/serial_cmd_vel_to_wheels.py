@@ -67,9 +67,6 @@ class CmdVelToMotors:
 
         rospy.loginfo("mapped commands: w_l: %d, w_r:%d", self.w_l, self.w_r)
 
-        # Open the serial connection (change 'COM1' to the appropriate port)
-        ser = serial.Serial(COM, BAUD, timeout=10)
-
         # Pack the integers into bytes and send them
         data = struct.pack('ii', self.w_l, self.w_r)
         ser.write(data)
@@ -85,6 +82,8 @@ class CmdVelToMotors:
 
 
 if __name__ == "__main__":
+    # Open the serial connection (change 'COM1' to the appropriate port)
+    ser = serial.Serial(COM, BAUD, timeout=20)
     rospy.init_node("CmdVelToMotors")
     cmdvel = CmdVelToMotors()
     cmdvel.main()
