@@ -39,6 +39,10 @@ The range used to identify the gray road color is:
 
   After the image is generated, we run a for loop to save a list of all the white pixels in the image. This is output to a file called white_pixels.txt.
 
+Commands to run Intel RealSense Depth Camera D435 camera (run in separate terminals):
+roslaunch realsense2_camera rs_camera.launch filters:=pointcloud
+rviz
+
 
 ```roscore
 cd catkin_ws
