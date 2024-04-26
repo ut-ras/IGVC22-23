@@ -6,9 +6,8 @@
 
 BUILD:
 1. Must have sick_scan_XD installed to work with LIDAR; follow instruction for "Build on Linux ROS1" here. Make sure to install from source instead of the preinstalled repo! https://github.com/SICKAG/sick_scan_xd/blob/master/INSTALL-ROS1.md#build-on-linux-ros1
-   
-3. Install Hector SLAM: sudo apt-get install ros-kinetic-hector-slam
-4. Clone this 'catkin_ws' and build with 'catkin_make'
+2. Install Hector SLAM: sudo apt-get install ros-noetic-hector-slam
+3. Clone this 'catkin_ws' and build with 'catkin_make'
 
 PACKAGE INFO:
 - ranger_2dnav:  This package contains all the path-planning contents & the combined all–in-one
@@ -20,6 +19,13 @@ launch file called ranger_start.launch. It contains the ROS move_base launch, al
 
 ----------
 *IMU* Usage:
+Install Phidgets drivers: https://github.com/ros-drivers/phidgets_drivers
+
+- Follow instructions in Phidgets Github for "Udev rules setup"
+- Start acquiring IMU data:
+   roslaunch phidgets_spatial spatial.launch
+- Perform necessary frame transforms: 
+   rosrun IMU_transform transform.py 
 
 
 *Camera - IN PROGRESS*
