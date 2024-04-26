@@ -9,17 +9,23 @@
         <!-- <param name="baud" value="9600"/> -->
     <!-- </node>  -->
 
+    <!-- Start IMU and IMU frame transform nodes -->
+    <include file="$(find phidgets_spatial)/launch/spatial.launch"/>
+    <node name="robot_imu_publisher" pkg="IMU_transform" type="transform.py" output="screen"/>
+
     <!-- Start LIDAR and Hector SLAM for visual odometry -->
     <include file="$(find ranger_2dnav)/ranger_hector_slam.launch"/>
 
-    <!-- TO DO: Start IMU -->
-
-    <!-- TO DO: Start Kalman Filter via robot_localization -->
+    <!-- Start Kalman Filter via robot_localization -->
+    <include file="$(find robot_localization)/launch/ekf_template.launch"/>
 
     <!-- Begin Cartographer SLAM -->
     <include file="$(find cartographer_ros)/launch/ranger.launch"/>
 
-    <!-- TO DO: Start Rviz with desired config -->
+    <!-- Start Rviz with desired config -->
+    <arg name="rviz" default="true"/>
+    <arg name="rviz_file" default="$(find ranger_2dnav)/ranger_map_rviz.rviz"/>
+    <node pkg="rviz" type="rviz" name="$(anon rviz)" args="-d $(arg rviz_file)" output="screen" if="$(arg rviz)"/>
 
     <!-- UPDATE: Start path planning framework -->
     <!-- <include file="$(find ranger_2dnav)/move_base.launch"/> -->
