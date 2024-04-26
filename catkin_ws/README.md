@@ -18,13 +18,14 @@ launch file called ranger_start.launch. It contains the ROS move_base launch, al
 
 - sabertooth_rospy: This package (specifically the CmdVelToMotors node) subscribes to the /cmd_vel topic and converts the velocity commands to differential wheel velocity inputs (based on robot geometry) and publishes this information in a special string format, which is received by a ROS subscriber on an Arduino.
 
+----------
+*IMU* Usage:
+
 
 *Camera - IN PROGRESS*
-
-Running the code
 (must have camera connected. This is for ROS Noetic)
 
-----------
+
 Lane Detection (and Pothole detection) using HSV Color Detection
 - The method used to identify lanes from an image of the road uses the following steps:
 1.  OpenCV HSV color filtering to detect road
