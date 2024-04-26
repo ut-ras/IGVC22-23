@@ -1,5 +1,4 @@
-#/!/usr/bin/python3.8
-
+#!/usr/bin/env python
 import rospy
 from std_msgs.msg import String
 from sensor_msgs.msg import Imu
@@ -16,7 +15,7 @@ def rec(msg):
         #rospy.loginfo(msg.data_raw)
         #print(msg.linearAcceleration.x)
         #publish_msg(msg)
-	rospy.loginfo(msg.header.frame_id)
+	# rospy.loginfo(msg.header.frame_id)
 	IMU_data.header.frame_id = msg.header.frame_id
 	IMU_data.orientation.x = msg.orientation.x
 	IMU_data.orientation.y = msg.orientation.y
@@ -52,8 +51,8 @@ def transform(sensor_data):
 #publisher for transformed IMU message
 #publishes at specified rate
 def publish_msg():
-        pub = rospy.Publisher('robot_imu', Imu, queue_size=30)
-        rospy.loginfo("publisher setup- topic: /robot_imu  @"+str(publish_rate))
+        pub = rospy.Publisher('imu', Imu, queue_size=30)   # change name to /imu
+        # rospy.loginfo("publisher setup- topic: /imu  @"+str(publish_rate))
         rate = rospy.Rate(publish_rate)
         while not rospy.is_shutdown():
                 #rospy.loginfo("published IMU data")
