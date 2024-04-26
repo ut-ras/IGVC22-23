@@ -44,6 +44,7 @@ roslaunch robot_localization ekf_template.launch
 Commands to run Intel RealSense Depth Camera D435 camera (run in separate terminals):
 
 roslaunch realsense2_camera rs_camera.launch filters:=pointcloud
+
 rviz
 
 *Lane Detection (and Pothole detection) using HSV Color Detection*
