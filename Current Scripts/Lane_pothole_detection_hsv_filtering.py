@@ -1,3 +1,5 @@
+# CURRENT LANE DETECTION SCRIPT 
+
 # dependencies - opencv-python and numpy
 # will probably need to replace cv2_imshow with cv2.imshow
 
