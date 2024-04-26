@@ -49,6 +49,8 @@ roslaunch realsense2_camera rs_camera.launch filters:=pointcloud
 rviz
 
 *Lane Detection (and Pothole detection) using HSV Color Detection*
+Current Scripts/Lane_pothole_detection_hsv_filtering.py
+
 - The method used to identify lanes from an image of the road uses the following steps:
 1.  OpenCV HSV color filtering to detect road
 2.  Blur image BEFORE using HSV
