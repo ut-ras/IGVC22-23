@@ -10,7 +10,7 @@ BUILD:
 4. Install Cartographer: https://google-cartographer-ros.readthedocs.io/en/latest/compilation.html  (used for SLAM)
 5. Template file for Cartographer located in: Current Scripts/templates/ranger.lua
 
-roslaunch ranger_2dnav ranger_hector_slan.launch 
+roslaunch ranger_2dnav ranger_hector_slam.launch 
 
 roslaunch cartographer_ros ranger.launch 
 
