@@ -11,6 +11,7 @@ BUILD:
 5. Template file for Cartographer located in: Current Scripts/templates/ranger.lua
 
 roslaunch ranger_2dnav ranger_hector_slan.launch 
+
 roslaunch cartographer_ros ranger.launch 
 
 PACKAGE INFO:
