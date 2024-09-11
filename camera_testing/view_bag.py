@@ -4,8 +4,6 @@ from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
 import cv2
 
-face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-
 def callback_function(msg):
     bridge = CvBridge()
     try:
