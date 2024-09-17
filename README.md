@@ -19,6 +19,6 @@ https://forum.opencv.org/t/a-fast-ellipse-detection-method-in-opencv-4-7-0/11586
 ### 09/17/24
 - [x] setup utexas-iot (34:7d:e4:4f:dd:72 | 1539 3473 3848 9877 6208)
 - [x] Ubuntu 20.04.6 LTS Focal. x86_64. GPU — GeForce GTX 1070 Mobile
-- [x] set up [ROS1 Noetic]([url](https://wiki.ros.org/noetic/Installation/Ubuntu))
+- [x] set up ([ROS1 Noetic](https://wiki.ros.org/noetic/Installation/Ubuntu))
 [] set up ([sick_scan_xd](https://github.com/SICKAG/sick_scan_xd/blob/develop/INSTALL-ROS1.md#build-on-linux-ros1))
 [] set up GPU | ([Driver](https://www.nvidia.com/en-us/geforce/drivers/results/230918/)) + [CUDA Toolkit](url)
