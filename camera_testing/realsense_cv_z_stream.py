@@ -15,17 +15,27 @@ import argparse
 
 def depth_image_to_point_cloud(depth_image, frame_id, fx, fy, cx, cy):
     height, width = depth_image.shape
-    points = []
     
-    for v in range(height):
-        for u in range(width):
-            z = depth_image[v, u] * 0.001  # Convert depth to meters
-            if z == 0:  # Skip invalid points
-                continue
-            x = (u - cx) * z / fx
-            y = (v - cy) * z / fy
-            
-            points.append([x, y, z])
+    # Create a grid of pixel coordinates (u, v)
+    u, v = np.meshgrid(np.arange(width), np.arange(height))
+    
+    # Get the depth values (convert to meters)
+    z = depth_image * 0.001
+    
+    # Mask out invalid points (where depth is zero)
+    valid_mask = z > 0
+    
+    # Apply the equations to calculate x and y using vectorized operations
+    x = (u - cx) * z / fx
+    y = (v - cy) * z / fy
+    
+    # Filter the valid points using the mask
+    x = x[valid_mask]
+    y = y[valid_mask]
+    z = z[valid_mask]
+    
+    # Stack the valid x, y, z points into an array
+    points = np.vstack((x, y, z)).T
     
     # Create a PointCloud2 message
     cloud_msg = PointCloud2()
@@ -41,7 +51,7 @@ def depth_image_to_point_cloud(depth_image, frame_id, fx, fy, cx, cy):
     
     # Pack points into PointCloud2
     cloud_msg.height = 1
-    cloud_msg.width = len(points)
+    cloud_msg.width = points.shape[0]
     cloud_msg.fields = fields
     cloud_msg.is_bigendian = False
     cloud_msg.point_step = 12  # 3 * 4 bytes
