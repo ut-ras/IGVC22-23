@@ -37,11 +37,7 @@ def point_cloud_to_image(points, image_width=500, image_height=1000):
     z_vals = points[:, 2]
     rgb_vals = points[:, 3]
 
-    # if x_min is None:
-    # x_min, x_max = np.min(x_vals), np.max(x_vals)
     x_min, x_max = -0.5, 0.5
-
-    # y_min, y_max = np.min(y_vals), np.max(y_vals)
     y_min, y_max = -1, 1
     x_scale = (image_width - 1) / (x_max - x_min)
     y_scale = (image_height - 1) / (y_max - y_min)
@@ -49,16 +45,20 @@ def point_cloud_to_image(points, image_width=500, image_height=1000):
     image = np.zeros((image_height, image_width, 3), dtype=np.uint8)
     image_3d = np.zeros((image_height, image_width, 4), dtype=np.float32)
     
-    for x, y, z, rgb in zip(x_vals, y_vals, z_vals, rgb_vals):
-        r, g, b = unpack_rgb(rgb)
-        
-        x_img = int((x - x_min) * x_scale)
-        y_img = int((y - y_min) * y_scale)
-        
-        if 0 <= x_img < image_width and 0 <= y_img < image_height:
-            cv2.circle(image, (x_img, y_img), 1, (b, g, r), -1)
-            image_3d[y_img, x_img, :3] = [b, g, r]
-            image_3d[y_img, x_img, 3] = z
+    # Vectorized operation for converting point coordinates to image coordinates
+    x_img = np.clip(((x_vals - x_min) * x_scale).astype(int), 0, image_width - 1)
+    y_img = np.clip(((y_vals - y_min) * y_scale).astype(int), 0, image_height - 1)
+    
+    # Convert float RGB values to uint32 first
+    rgb_vals_uint32 = rgb_vals.astype(np.float32).view(np.uint32)
+    r = (rgb_vals_uint32 >> 16) & 0x0000ff
+    g = (rgb_vals_uint32 >> 8) & 0x0000ff
+    b = rgb_vals_uint32 & 0x0000ff
+    
+    # Assign pixel values
+    image[y_img, x_img, :] = np.stack([b, g, r], axis=-1)
+    image_3d[y_img, x_img, :3] = np.stack([b, g, r], axis=-1)
+    image_3d[y_img, x_img, 3] = z_vals
     
     return image, image_3d
 
@@ -95,7 +95,7 @@ if __name__ == "__main__":
     sub = rospy.Subscriber("/camera/depth/color/points", PointCloud2, callback_function)
 
     while not rospy.is_shutdown():
-        rospy.sleep(0.1)
+        rospy.sleep(0.01)
     
     rospy.loginfo("Exiting program")
     rospy.sleep(1)
