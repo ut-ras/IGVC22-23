@@ -197,6 +197,12 @@ def callback_function(msg):
     cv2.imshow('Filtered Image', filtered_image)
     cv2.imshow('Depth Image', depth_image)
     cv2.imshow('RGB Depth Image', z_visual_rgb)
+
+    # Convert depth_image to point cloud
+    point_cloud = depth_image_to_point_cloud(depth_image, frame_id="camera_link", fx=525.0, fy=525.0, cx=319.5, cy=239.5)
+    
+    # Publish the point cloud
+    pub.publish(point_cloud)
     
     key = cv2.waitKey(3)
     if key == ord('q'):
@@ -214,6 +220,9 @@ if __name__ == "__main__":
     broadcast_static_transform(camera_height, camera_angle)
 
     sub = rospy.Subscriber("/camera/depth/color/points", PointCloud2, callback_function)
+
+    pub = rospy.Publisher("/converted_point_cloud", PointCloud2, queue_size=10)
+
 
     while not rospy.is_shutdown():
         rospy.sleep(0.01)
