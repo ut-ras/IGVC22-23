@@ -15,4 +15,4 @@ If unsure which topic to record, check the python file and see which topic we ar
 ## ToDo:
 
 - converting our ros depth image into pointcloud (for path planning)
-- look into ROS static frame transforms to account for the camera being tilted down. According to Tarun, "we can write transforms from one sensor's coordinate frame (in this case the camera) to the xyz coordinate frame of the robot which is called base_link. base_link would be located at the center point between our wheels since the camera would be tilted, the transforms would have both a translation and rotation component"
+- look into ROS static frame transforms to account for the camera being tilted down. According to Tarun, "we can write transforms from one sensor's coordinate frame (in this case the camera) to the xyz coordinate frame of the robot which is called base_link. base_link would be located at the center point between our wheels since the camera would be tilted, the transforms would have both a translation and rotation component" -- this step is done, but need to double check
