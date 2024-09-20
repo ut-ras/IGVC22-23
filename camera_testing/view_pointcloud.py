@@ -26,8 +26,9 @@ def point_cloud_to_image(points, image_width=500, image_height=1000):
 
     # rgb_vals = points[:, 3] # rgb not needed anymore
 
-    # x_min, x_max = -0.5, 0.5
-    # y_min, y_max = -1, 1
+    x_min, x_max = -0.5, 0.5
+    y_min, y_max = -1, 1
+
     x_min, x_max = np.min(x_vals), np.max(x_vals)
     y_min, y_max = np.min(y_vals), np.max(y_vals)
     x_scale = (image_width - 1) / (x_max - x_min)
@@ -35,16 +36,23 @@ def point_cloud_to_image(points, image_width=500, image_height=1000):
     
     image = np.zeros((image_height, image_width, 3), dtype=np.uint8)
     
-    for x, y, z in zip(x_vals, y_vals, z_vals):
+    # Vectorized computation of image coordinates
+    x_img = np.clip(((x_vals - x_min) * x_scale).astype(int), 0, image_width - 1)
+    y_img = np.clip(((y_vals - y_min) * y_scale).astype(int), 0, image_height - 1)
+
+
         
-        x_img = int((x - x_min) * x_scale)
-        y_img = int((y - y_min) * y_scale)
-        
-        if 0 <= x_img < image_width and 0 <= y_img < image_height:
-            # Map z (depth) to a grayscale value (255 is close, 0 is far)
-            depth_value = 255 - int(np.clip(z, 0, 5) * 255 / 5)  # Adjust the scale as necessary
-            image[y_img, x_img] = depth_value
+    # Map z values to depth (grayscale) 255 is close, 0 is far
+    depth_values = 255 - np.clip(z_vals, 0, 5) * 255 / 5
+    depth_values = depth_values.astype(np.uint8)
     
+
+    # Filter valid indices within image boundaries
+    valid_mask = (x_img >= 0) & (x_img < image_width) & (y_img >= 0) & (y_img < image_height)
+
+
+    # Assign depth values to the corresponding pixels
+    image[y_img[valid_mask], x_img[valid_mask]] = depth_values[valid_mask, None]
     return image
 
 def print_data(data):
@@ -56,8 +64,9 @@ def print_data(data):
 def callback_function(msg):
     rospy.loginfo("Message received by subscriber")
     image = print_data(msg)
+    blurred_image = cv2.GaussianBlur(image, (5, 5), 20)  # Adjust kernel size and sigma value as needed
     
-    cv2.imshow('Point Cloud Image', image)
+    cv2.imshow('Point Cloud Image', blurred_image)
     key = cv2.waitKey(3)
     if key == ord('q'):
         rospy.signal_shutdown("pressed q")
@@ -69,7 +78,7 @@ if __name__ == "__main__":
     sub = rospy.Subscriber("/converted_point_cloud", PointCloud2, callback_function)
 
     while not rospy.is_shutdown():
-        rospy.sleep(0.1)
+        rospy.sleep(0.01)
     
     rospy.loginfo("Exiting program")
     rospy.sleep(1)

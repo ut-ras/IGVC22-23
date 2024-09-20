@@ -13,53 +13,41 @@ import sys
 from matplotlib import pyplot as plt
 import argparse
 
-def depth_image_to_point_cloud(depth_image, frame_id, fx, fy, cx, cy):
-    height, width = depth_image.shape
-    
-    # Create a grid of pixel coordinates (u, v)
-    u, v = np.meshgrid(np.arange(width), np.arange(height))
-    
-    # Get the depth values (convert to meters)
-    z = depth_image * 0.001
-    
-    # Mask out invalid points (where depth is zero)
-    valid_mask = z > 0
-    
-    # Apply the equations to calculate x and y using vectorized operations
-    x = (u - cx) * z / fx
-    y = (v - cy) * z / fy
-    
-    # Filter the valid points using the mask
-    x = x[valid_mask]
-    y = y[valid_mask]
-    z = z[valid_mask]
-    
-    # Stack the valid x, y, z points into an array
-    points = np.vstack((x, y, z)).T
-    
-    # Create a PointCloud2 message
-    cloud_msg = PointCloud2()
-    cloud_msg.header.stamp = rospy.Time.now()
-    cloud_msg.header.frame_id = frame_id
-    
-    # Define the fields for PointCloud2
+def reverse_image_to_point_cloud(depth_image, x_min, x_max, y_min, y_max, image_width, image_height):
+    """
+    Reverse the transformations to convert the depth image back to a point cloud.
+    """
+    # Create grid of pixel coordinates
+    y_img, x_img = np.mgrid[0:image_height, 0:image_width]
+
+    # Reverse the scaling of x and y image coordinates back to meters
+    x_vals = x_img / ((image_width - 1) / (x_max - x_min)) + x_min
+    y_vals = y_img / ((image_height - 1) / (y_max - y_min)) + y_min
+
+    # Z values are directly from the depth image
+    z_vals = depth_image  # Depth values remain unchanged
+
+    # Combine x, y, z into a point cloud
+    point_cloud = np.stack([x_vals, y_vals, z_vals], axis=-1)
+
+    return point_cloud
+
+def create_point_cloud2(points, frame_id="camera_link"):
+    """ Create a PointCloud2 message from a list of 3D points. """
     fields = [
         PointField('x', 0, PointField.FLOAT32, 1),
         PointField('y', 4, PointField.FLOAT32, 1),
-        PointField('z', 8, PointField.FLOAT32, 1)
+        PointField('z', 8, PointField.FLOAT32, 1),
     ]
-    
-    # Pack points into PointCloud2
-    cloud_msg.height = 1
-    cloud_msg.width = points.shape[0]
-    cloud_msg.fields = fields
-    cloud_msg.is_bigendian = False
-    cloud_msg.point_step = 12  # 3 * 4 bytes
-    cloud_msg.row_step = cloud_msg.point_step * cloud_msg.width
-    cloud_msg.is_dense = True
-    cloud_msg.data = np.asarray(points, np.float32).tobytes()
-    
+
+    header = std_msgs.msg.Header()
+    header.stamp = rospy.Time.now()
+    header.frame_id = frame_id
+
+    # Create a PointCloud2 message
+    cloud_msg = pc2.create_cloud(header, fields, points.reshape(-1, 3))  # Flatten the point cloud for publishing
     return cloud_msg
+
 
 # Add the static transform broadcaster function
 def broadcast_static_transform(camera_height, camera_angle):
@@ -202,17 +190,18 @@ def print_data(data):
 def callback_function(msg):
     rospy.loginfo("Message received by subscriber")
     image, filtered_image, depth_image, z_visual_rgb = print_data(msg)
+
+    # Reverse the transformations and generate the point cloud from depth_image
+    point_cloud = reverse_image_to_point_cloud(depth_image, x_min, x_max, y_min, y_max, image.shape[1], image.shape[0])
+    
+    # Publish the point cloud
+    cloud_msg = create_point_cloud2(point_cloud)
+    pub.publish(cloud_msg)
     
     cv2.imshow('Point Cloud Image', image)
     cv2.imshow('Filtered Image', filtered_image)
     cv2.imshow('Depth Image', depth_image)
     cv2.imshow('RGB Depth Image', z_visual_rgb)
-
-    # Convert depth_image to point cloud
-    point_cloud = depth_image_to_point_cloud(depth_image, frame_id="camera_link", fx=525.0, fy=525.0, cx=319.5, cy=239.5)
-    
-    # Publish the point cloud
-    pub.publish(point_cloud)
     
     key = cv2.waitKey(3)
     if key == ord('q'):
