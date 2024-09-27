@@ -183,7 +183,7 @@ def print_data(data):
 
     # The above lines use Advanced Indexing in NumPy - look this up if unclear
 
-    print(f"shape of depth image: {filtered_image.shape}")
+    # print(f"shape of depth image: {filtered_image.shape}")
 
     return image, filtered_image, depth_image, z_visual_rgb
 
@@ -222,9 +222,10 @@ if __name__ == "__main__":
 
     pub = rospy.Publisher("/converted_point_cloud", PointCloud2, queue_size=10)
 
+    rate = rospy.Rate(10)
 
     while not rospy.is_shutdown():
-        rospy.sleep(0.01)
+        rate.sleep()
     
     rospy.loginfo("Exiting program")
     rospy.sleep(1)
