@@ -14,6 +14,8 @@ pip install opencv-contrib-python
 - otherwise, you cannot use the functions used (that come from the 2017 paper you can find if you dig deeper)
 https://forum.opencv.org/t/a-fast-ellipse-detection-method-in-opencv-4-7-0/11586/2
 
+## 2024 Milestone
+- [GANNT Chart](https://1drv.ms/x/s!AoDwxzZW_Es1guJuSMhY2yrf2KAK9Q?e=Cfg1bK)
 
 ## IGVC Laptop Info & Update
 ### 09/17/24
@@ -23,3 +25,5 @@ https://forum.opencv.org/t/a-fast-ellipse-detection-method-in-opencv-4-7-0/11586
 - [x] set up [IMU Phidget](https://github.com/ros-drivers/phidgets_drivers?tab=readme-ov-file)
 - [ ] set up [sick_scan_xd](https://github.com/SICKAG/sick_scan_xd/blob/develop/INSTALL-ROS1.md#build-on-linux-ros1)
 - [ ] set up GPU | [Driver](https://www.nvidia.com/en-us/geforce/drivers/results/230918/) + [CUDA Toolkit](url)
+### 10/02/24
+- [ ] 
