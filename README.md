@@ -22,6 +22,7 @@ https://forum.opencv.org/t/a-fast-ellipse-detection-method-in-opencv-4-7-0/11586
 - [x] Ubuntu 20.04.6 LTS Focal. x86_64. GPU — GeForce GTX 1070 Mobile
 - [x] [SICK MRS1000](https://www.sick.com/ag/en/catalog/products/lidar-and-radar-sensors/lidar-sensors/mrs1000/c/g387152)
 - [x] [Intel RealSense Depth Camera D435](https://www.intelrealsense.com/depth-camera-d435/)
+- [x] [PhidgetSpatial Precision 3/3/3](https://www.phidgets.com/?prodid=1205) X 2
 
 ## Update
 ### 09/17/24
