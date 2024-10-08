@@ -32,5 +32,9 @@ https://forum.opencv.org/t/a-fast-ellipse-detection-method-in-opencv-4-7-0/11586
 - [x] set up [IMU Phidget](https://github.com/ros-drivers/phidgets_drivers?tab=readme-ov-file)
 - [ ] set up [sick_scan_xd](https://github.com/SICKAG/sick_scan_xd/blob/develop/INSTALL-ROS1.md#build-on-linux-ros1)
 - [ ] set up GPU | [Driver](https://www.nvidia.com/en-us/geforce/drivers/results/230918/) + [CUDA Toolkit](url)
-### 10/02/24
-- [ ] 
+### 10/08/24
+- [ ] Test 2 Phidget IMUs
+- [ ] Test SICK LiDAR
+- [ ] Simulation environment
+  - [ ] robot
+  - [ ] world
