@@ -37,4 +37,6 @@ https://forum.opencv.org/t/a-fast-ellipse-detection-method-in-opencv-4-7-0/11586
 - [ ] Test SICK LiDAR
 - [ ] Simulation environment
   - [ ] robot
+    - [ ] Test on Husky setup
+    - [ ] Migrate to IGVC
   - [ ] world
