@@ -1,0 +1,13 @@
+<launch>
+  <!-- Start Gazebo and load an empty world -->
+  <arg name="world_name" default="$(find gazebo_ros)/worlds/empty.world"/>
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(arg world_name)"/>
+  </include>
+
+  <!-- Define the path to the model -->
+  <param name="robot_description" command="$(find xacro)/xacro '$(find track_sim)/models/track.sdf'"/>
+
+  <!-- Spawn the model in Gazebo -->
+  <node name="spawn_model" pkg="gazebo_ros" type="spawn_model" output="screen" args="-file $(find track_sim)/models/track.sdf -sdf -model four_wall_structure -x 0 -y 0 -z 0"/>
+</launch>
