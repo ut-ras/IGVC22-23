@@ -12,6 +12,9 @@ Use `rosbag play [file_name]` to replay the data.
 
 If unsure which topic to record, check the python file and see which topic we are subscribing to.
 
+## Running the Camera
+To run the camera, open a new terminal and run the command `roslaunch realsense2_camera rs_camera.launch filters:=pointcloud`.
+
 ## ToDo:
 
 - converting our ros depth image into pointcloud (for path planning)
