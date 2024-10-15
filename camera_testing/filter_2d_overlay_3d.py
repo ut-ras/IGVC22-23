@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import Image, PointCloud2
 import cv2
 from cv_bridge import CvBridge, CvBridgeError
 import std_msgs.msg
@@ -39,12 +39,24 @@ def image_callback(msg):
         filtered_image = filter_img(cv_image)
         
         # Display the image
-        cv2.imshow("Camera Image", filtered_image)
+        cv2.imshow("Original Image", cv_image)
+        cv2.imshow("Filtered Image", filtered_image)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             rospy.signal_shutdown("Quit OpenCV window")
             cv2.destroyAllWindows()
     except CvBridgeError as e:
         rospy.logerr(f"CvBridge Error: {e}")
+
+def pointcloud_to_img(points, image_width=500, image_height=1000):
+    pass
+
+def pointcloud_callback(msg):
+    rospy.loginfo("PointCloud Message received by subscriber")
+    point_generator = pc2.read_points(msg, field_names=("x", "y", "z", "rgb"), skip_nans=True)
+    points = np.array(list(point_generator))
+    # TODO Oct 16th
+
+    
 
 # Add the static transform broadcaster function
 def broadcast_static_transform(camera_height, camera_angle):
@@ -91,6 +103,7 @@ def main():
     
     # Subscribe to the /camera/color/image_raw topic
     rospy.Subscriber('/camera/color/image_raw', Image, image_callback)
+    rospy.Subscriber('/camera/depth/color/points', PointCloud2, pointcloud_callback)
     
     # Keep the program running until manually interrupted
     rospy.spin()

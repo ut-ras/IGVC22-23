@@ -145,7 +145,7 @@ def point_cloud_to_image(points, image_width=500, image_height=1000):
     
     return image, image_3d
 
-def print_data(data):
+def process_pointcloud(data):
     point_generator = pc2.read_points(data, field_names=("x", "y", "z", "rgb"), skip_nans=True)
     points = np.array(list(point_generator))
     image, image_3d = point_cloud_to_image(points)
@@ -189,7 +189,7 @@ def print_data(data):
 
 def callback_function(msg):
     rospy.loginfo("Message received by subscriber")
-    image, filtered_image, depth_image, z_visual_rgb = print_data(msg)
+    image, filtered_image, depth_image, z_visual_rgb = process_pointcloud(msg)
 
     # Reverse the transformations and generate the point cloud from depth_image
     point_cloud = reverse_image_to_point_cloud(depth_image, x_min, x_max, y_min, y_max, image.shape[1], image.shape[0])
