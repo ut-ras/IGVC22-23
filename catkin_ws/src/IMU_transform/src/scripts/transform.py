@@ -34,19 +34,20 @@ def rec(msg):
 #used to transfrom Imu type data if needed
 #TO BE UPDATED BASED ON FRAME OF REFERENCE FROM SENSOR
 def transform(sensor_data):
-	temp1 = sensor_data.orientation.x
-	sensor_data.orientation.x = sensor_data.orientation.y
-	sensor_data.orientation.y = temp1
-	sensor_data.orientation.z *= -1
+	temp = sensor_data.orientation.x
+	sensor_data.orientation.x = -1*sensor_data.orientation.y
+	sensor_data.orientation.y = -1*temp
+	sensor_data.orientation.z *= 1
+        
+	temp = sensor_data.angular_velocity.x
+	sensor_data.angular_velocity.x = sensor_data.angular_velocity.y
+	sensor_data.angular_velocity.y = temp
+	sensor_data.angular_velocity.z *= -1
 
-	sensor_data.angular_velocity.x += 0
-	sensor_data.angular_velocity.y += 0
-	sensor_data.angular_velocity.z += 0
-
-	temp2 = sensor_data.linear_acceleration.x
-	sensor_data.linear_acceleration.x = sensor_data.linear_acceleration.y
-	sensor_data.linear_acceleration.y = temp2
-	sensor_data.linear_acceleration.z *= -1
+	temp = sensor_data.linear_acceleration.x
+	sensor_data.linear_acceleration.x = -1*sensor_data.linear_acceleration.y
+	sensor_data.linear_acceleration.y = -1*temp
+	sensor_data.linear_acceleration.z *= 1
 
 #publisher for transformed IMU message
 #publishes at specified rate
