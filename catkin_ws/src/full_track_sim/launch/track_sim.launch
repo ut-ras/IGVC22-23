@@ -1,0 +1,7 @@
+<launch>
+    <!-- Set up the environment for Gazebo -->
+    <env name="GAZEBO_MODEL_PATH" value="$(find full_track_sim)/models" />
+
+    <!-- Launch Gazebo with the specified world file -->
+    <node name="gazebo_track_sim" pkg="gazebo_ros" type="gazebo" args="$(find full_track_sim)/worlds/track_sim.world" />
+</launch>

@@ -1,0 +1,72 @@
+<?xml version="1.0" ?>
+<sdf version="1.7">
+  <model name="Track">
+    <!-- Static means the model will not move, set to 'true' if it's a fixed object -->
+    <static>true</static>
+    
+    <!-- Link is the primary building block for the model -->
+    <link name="link">
+      
+      <!-- Visual properties (how the model looks) -->
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <!-- Path to the STL file -->
+            <uri>model://track/meshes/Track.STL</uri>
+            <!-- Optional scale if you want to scale the model -->
+            <scale>1.0 1.0 1.0</scale>
+          </mesh>
+        </geometry>
+        
+        <!-- Material can be added if you want to define the color/texture -->
+        <material>
+          <ambient>1 1 1 1</ambient> <!-- RGBA for ambient light -->
+          <diffuse>1 1 1 1</diffuse> <!-- RGBA for diffuse reflection -->
+          <specular>0.1 0.1 0.1 1</specular> <!-- RGBA for specular reflection -->
+          <emissive>0 0 0 1</emissive> <!-- RGBA for emission -->
+        </material>
+      </visual>
+      
+      <!-- Collision properties (how Gazebo handles physical collisions) -->
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <!-- Same path to the STL file for collision geometry -->
+            <uri>model://track/meshes/Track.STL</uri>
+            <scale>1.0 1.0 1.0</scale>
+          </mesh>
+        </geometry>
+        <!-- Optional friction, restitution, and damping parameters for more advanced physics -->
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.5</mu> <!-- Friction coefficient -->
+              <mu2>0.5</mu2>
+            </ode>
+          </friction>
+          <bounce>
+            <restitution_coefficient>0.1</restitution_coefficient>
+          </bounce>
+          <contact>
+            <ode>
+              <soft_cfm>0.0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
+      
+      <!-- Inertial properties (mass and inertia for dynamic simulation) -->
+      <inertial>
+        <mass>1.0</mass> <!-- Set the mass of the model -->
+        <!-- Inertia matrix: this is simplified and should be computed properly for complex models -->
+        <inertia>
+          <ixx>0.1</ixx>
+          <iyy>0.1</iyy>
+          <izz>0.1</izz>
+        </inertia>
+      </inertial>
+      
+    </link>
+  </model>
+</sdf>
