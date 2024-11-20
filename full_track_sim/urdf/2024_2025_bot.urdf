@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="2024_2025_bot">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0.039691718110049 -0.00408684872748927 0.215722209230105"
+        rpy="0 0 0" />
+      <mass
+        value="41.7330858272378" />
+      <inertia
+        ixx="0.43908302640514"
+        ixy="2.40283208197993E-05"
+        ixz="0.000652228711394774"
+        iyy="0.618146428927519"
+        iyz="-9.96247725937063E-05"
+        izz="0.887350016135516" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://2024_2025_bot/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://2024_2025_bot/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="lw_link">
+    <inertial>
+      <origin
+        xyz="2.22044604925031E-16 -0.00755717599006767 -6.10622663543836E-16"
+        rpy="0 0 0" />
+      <mass
+        value="0.778742193182494" />
+      <inertia
+        ixx="0.00236101828121958"
+        ixy="1.98094149362005E-18"
+        ixz="-1.49493835134613E-11"
+        iyy="0.00457095250654117"
+        iyz="-2.30636479245626E-18"
+        izz="0.00236101826957719" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://2024_2025_bot/meshes/lw_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://2024_2025_bot/meshes/lw_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lw_joint"
+    type="continuous">
+    <origin
+      xyz="0 -0.22485 0"
+      rpy="0 0 3.1416" />
+    <parent
+      link="base_link" />
+    <child
+      link="lw_link" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+  <link
+    name="rw_link">
+    <inertial>
+      <origin
+        xyz="5.55111512312578E-16 0.00755717599006767 -1.66533453693773E-16"
+        rpy="0 0 0" />
+      <mass
+        value="0.778742193182493" />
+      <inertia
+        ixx="0.00236101827323606"
+        ixy="-3.50029937696044E-18"
+        ixz="-1.58963759691438E-11"
+        iyy="0.00457095250654117"
+        iyz="1.35095014383762E-18"
+        izz="0.00236101827756071" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://2024_2025_bot/meshes/rw_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://2024_2025_bot/meshes/rw_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="rw_joint"
+    type="continuous">
+    <origin
+      xyz="0 0.22485 0"
+      rpy="0 0 3.1416" />
+    <parent
+      link="base_link" />
+    <child
+      link="rw_link" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+  <link
+    name="fws_link">
+    <inertial>
+      <origin
+        xyz="-0.0195308108815493 1.76984750166476E-06 -0.0272578702159444"
+        rpy="0 0 0" />
+      <mass
+        value="0.0113140307205882" />
+      <inertia
+        ixx="1.03224627753612E-05"
+        ixy="-2.66978720791946E-09"
+        ixz="-1.37149631707621E-06"
+        iyy="8.21508019718406E-06"
+        iyz="-1.23263481303854E-09"
+        izz="6.81102561077922E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://2024_2025_bot/meshes/fws_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://2024_2025_bot/meshes/fws_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="fws_joint"
+    type="continuous">
+    <origin
+      xyz="-0.26987 0 0.015564"
+      rpy="0 0 2.7681" />
+    <parent
+      link="base_link" />
+    <child
+      link="fws_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="fw_link">
+    <inertial>
+      <origin
+        xyz="3.33066907387547E-16 -0.016002 5.55111512312578E-17"
+        rpy="0 0 0" />
+      <mass
+        value="0.214889332875345" />
+      <inertia
+        ixx="0.00015617334348135"
+        ixy="-3.04931861011548E-20"
+        ixz="3.91060267035266E-20"
+        iyy="0.000279322921493131"
+        iyz="3.72931766680955E-21"
+        izz="0.00015617334348135" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://2024_2025_bot/meshes/fw_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.250980392156863 0.250980392156863 0.250980392156863 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://2024_2025_bot/meshes/fw_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="fw_joint"
+    type="continuous">
+    <origin
+      xyz="-0.030717 0.016002 -0.06613"
+      rpy="0 0 0" />
+    <parent
+      link="fws_link" />
+    <child
+      link="fw_link" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+  <link
+    name="bws_link">
+    <inertial>
+      <origin
+        xyz="-0.0195304181349759 1.46262498562644E-06 -0.0272578329797158"
+        rpy="0 0 0" />
+      <mass
+        value="0.0113142052930242" />
+      <inertia
+        ixx="1.03224394783446E-05"
+        ixy="-2.474889068071E-09"
+        ixz="-1.37154210636998E-06"
+        iyy="8.21504956064638E-06"
+        iyz="-1.21089695509568E-09"
+        izz="6.81105311489621E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://2024_2025_bot/meshes/bws_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://2024_2025_bot/meshes/bws_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="bws_joint"
+    type="continuous">
+    <origin
+      xyz="0.31433 0 0.015564"
+      rpy="0 0 3.0225" />
+    <parent
+      link="base_link" />
+    <child
+      link="bws_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="bw_link">
+    <inertial>
+      <origin
+        xyz="-8.32667268468867E-17 -0.016002 1.66533453693773E-16"
+        rpy="0 0 0" />
+      <mass
+        value="0.214889332875346" />
+      <inertia
+        ixx="0.000156173343481351"
+        ixy="3.72694496791892E-20"
+        ixz="-6.48681789831065E-20"
+        iyy="0.000279322921493131"
+        iyz="1.38021507263222E-20"
+        izz="0.000156173343481351" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://2024_2025_bot/meshes/bw_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.250980392156863 0.250980392156863 0.250980392156863 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://2024_2025_bot/meshes/bw_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="bw_joint"
+    type="continuous">
+    <origin
+      xyz="-0.030717 0.016002 -0.06613"
+      rpy="0 0 0" />
+    <parent
+      link="bws_link" />
+    <child
+      link="bw_link" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+  <link
+    name="lidar_link">
+    <inertial>
+      <origin
+        xyz="-0.00138215214104065 0.000110382918995677 -0.0493931461338349"
+        rpy="0 0 0" />
+      <mass
+        value="1.4543710187739" />
+      <inertia
+        ixx="0.00288109893826837"
+        ixy="-1.65025165509676E-06"
+        ixz="-4.63864237922804E-06"
+        iyy="0.00281867195954941"
+        iyz="-1.35685531049515E-06"
+        izz="0.00372506178133541" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://2024_2025_bot/meshes/lidar_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.941176470588235 0.674509803921569 0.117647058823529 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://2024_2025_bot/meshes/lidar_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lidar_joint"
+    type="fixed">
+    <origin
+      xyz="-0.42457 0 0.30117"
+      rpy="0 0 -3.1416" />
+    <parent
+      link="base_link" />
+    <child
+      link="lidar_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+
+  <!-- LIDAR LINK -->
+  <gazebo reference="lidar_link">
+    <sensor type="ray" name="lidar_sensor">
+      <plugin name="gazebo_ros_laser" filename="libgazebo_ros_laser.so">
+        <topicName>/lidar_scan</topicName>
+        <frameName>existing_link</frameName>
+      </plugin>
+      <pose>0 0 0 0 0 0</pose>  <!-- Adjust if needed -->
+      <update_rate>20.0</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>1</resolution>
+            <min_angle>-1.57</min_angle>
+            <max_angle>1.57</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.2</min>
+          <max>30.0</max>
+          <resolution>0.01</resolution>
+        </range>
+      </ray>
+    </sensor>
+  </gazebo>
+
+  <link
+    name="fimu_link">
+    <inertial>
+      <origin
+        xyz="-0.000247961669382457 -5.55111512312578E-17 -0.0226421620018609"
+        rpy="0 0 0" />
+      <mass
+        value="0.112408116085887" />
+      <inertia
+        ixx="4.85417425128467E-05"
+        ixy="-3.39062466668548E-21"
+        ixz="3.93284005435584E-08"
+        iyy="3.12320558220572E-05"
+        iyz="1.09268990438489E-20"
+        izz="7.07438105027894E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://2024_2025_bot/meshes/fimu_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://2024_2025_bot/meshes/fimu_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="fimu_joint"
+    type="fixed">
+    <origin
+      xyz="-0.2192 -0.000127 0.26829"
+      rpy="0 0 3.1416" />
+    <parent
+      link="base_link" />
+    <child
+      link="fimu_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+
+  <!-- IMU lINK -->
+
+  <gazebo reference="fimu_link">
+    <sensor type="imu" name="fimu">
+      <plugin name="gazebo_ros_imu" filename="libgazebo_ros_imu.so">
+        <topicName>/fimu/data</topicName>
+        <frameName>fimu_link</frameName>
+      </plugin>
+      <update_rate>50.0</update_rate>
+    </sensor>
+  </gazebo>
+
+  <link
+    name="bimu_link">
+    <inertial>
+      <origin
+        xyz="-0.000247961669382346 -5.55111512312578E-17 -0.022642162001861"
+        rpy="0 0 0" />
+      <mass
+        value="0.112408116085887" />
+      <inertia
+        ixx="4.85417425128467E-05"
+        ixy="-2.10711074068205E-22"
+        ixz="3.93284005435596E-08"
+        iyy="3.12320558220572E-05"
+        iyz="1.0705632443981E-20"
+        izz="7.07438105027894E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://2024_2025_bot/meshes/bimu_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://2024_2025_bot/meshes/bimu_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="bimu_joint"
+    type="fixed">
+    <origin
+      xyz="0.009398 0 0.26829"
+      rpy="0 0 3.1416" />
+    <parent
+      link="base_link" />
+    <child
+      link="bimu_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <!-- IMU LINK -->
+  <gazebo reference="bimu_link">
+    <sensor type="imu" name="bimu">
+      <plugin name="gazebo_ros_imu" filename="libgazebo_ros_imu.so">
+        <topicName>/bimu/data</topicName>
+        <frameName>bimu_link</frameName>
+      </plugin>
+      <update_rate>50.0</update_rate>
+    </sensor>
+  </gazebo>
+</robot>

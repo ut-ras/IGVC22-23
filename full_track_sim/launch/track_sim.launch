@@ -1,0 +1,17 @@
+<launch>
+    <!-- Set up the environment for Gazebo -->
+    <env name="GAZEBO_MODEL_PATH" value="$(find full_track_sim)/models" />
+
+    <!-- Launch Gazebo with the specified world file -->
+    <node name="gazebo" pkg="gazebo_ros" type="gazebo" args="$(find full_track_sim)/worlds/track_sim.world" />
+    <!-- <node name="gazebo_track_sim" pkg="gazebo_ros" type="gazebo" args="$(find full_track_sim)/worlds/track_sim.world" /> -->
+
+
+    <!-- Spawn the robot in Gazebo -->
+    <param name="robot_description" command="cat $(find full_track_sim)/urdf/2024_2025_bot.urdf" />
+
+    <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" output="screen"
+    args="-param robot_description -urdf -model 2024_2025_bot" required="false"/>
+    <param name="wait_for_service" value="true"/>
+
+</launch>
