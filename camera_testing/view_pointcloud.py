@@ -16,7 +16,7 @@ def unpack_rgb(rgb_value):
     b = (integer) & 0x0000ff
     return r, g, b
 
-def point_cloud_to_image(points, image_width=500, image_height=1000):
+def point_cloud_to_image(points, image_width=640, image_height=480):
     global x_min, x_max, y_min, y_max
 
     x_vals = points[:, 0]
@@ -26,11 +26,11 @@ def point_cloud_to_image(points, image_width=500, image_height=1000):
 
     # rgb_vals = points[:, 3] # rgb not needed anymore
 
-    x_min, x_max = -0.5, 0.5
-    y_min, y_max = -1, 1
+    x_min, x_max = -4.744822833574398, 4.744822833574398
+    y_min, y_max = -2.771545257263845, 2.771545257263845
 
-    x_min, x_max = np.min(x_vals), np.max(x_vals)
-    y_min, y_max = np.min(y_vals), np.max(y_vals)
+    # x_min, x_max = np.min(x_vals), np.max(x_vals)
+    # y_min, y_max = np.min(y_vals), np.max(y_vals)
     x_scale = (image_width - 1) / (x_max - x_min)
     y_scale = (image_height - 1) / (y_max - y_min)
     
@@ -75,7 +75,7 @@ if __name__ == "__main__":
     rospy.init_node("depth_image_subscriber")
     rospy.loginfo("PointCloud subscriber launched")
 
-    sub = rospy.Subscriber("/converted_point_cloud", PointCloud2, callback_function)
+    sub = rospy.Subscriber("/filtered_depth/pointcloud", PointCloud2, callback_function)
 
     while not rospy.is_shutdown():
         rospy.sleep(0.01)
