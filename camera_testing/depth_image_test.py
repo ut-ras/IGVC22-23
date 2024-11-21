@@ -1,13 +1,9 @@
 import rospy
 import message_filters
-from sensor_msgs.msg import Image, PointCloud2, PointField
-from std_msgs.msg import Header
+from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
 import cv2
-import sensor_msgs.point_cloud2 as pc2
-from concurrent.futures import ThreadPoolExecutor
-import os
 
 
 bridge = CvBridge()
@@ -17,63 +13,6 @@ filtered_depth_img = None
 depth_img = None
 filtered_depth_img_view = None
 max_depth = 2500
-
-# Camera intrinsics (replace with your actual values)
-fx = 607.7837524414062  # Focal length in pixels
-fy = 606.473876953125  # Focal length in pixels
-cx = 323.4130554199219  # Principal point (center of image)
-cy = 245.60577392578125  # Principal point (center of image)
-
-num_threads = os.cpu_count()  # Number of threads for parallel processing
-
-
-def process_chunk(chunk):
-    """Process a chunk of the image to compute point cloud."""
-    start_row, end_row, depth_chunk, mask_chunk = chunk
-    v, u = np.meshgrid(
-        np.arange(depth_chunk.shape[1]), np.arange(start_row, end_row)
-    )  # Compute pixel indices
-
-    z = depth_chunk / 1000.0  # Convert mm to meters
-    x = (u - cx) * z / fx
-    y = (v - cy) * z / fy
-
-    valid_points = mask_chunk  # Apply the mask to filter points
-    points = np.column_stack((x[valid_points], y[valid_points], z[valid_points]))
-    return points
-
-def parallel_depth_to_pointcloud(depth_img, mask):
-    """Convert filtered depth image to a PointCloud2 message in parallel."""
-    height, width = depth_img.shape
-
-    # Create chunks for parallel processing
-    chunk_size = height // num_threads
-    chunks = [
-        (i * chunk_size, (i + 1) * chunk_size if i < num_threads - 1 else height,
-         depth_img[i * chunk_size:(i + 1) * chunk_size],
-         mask[i * chunk_size:(i + 1) * chunk_size])
-        for i in range(num_threads)
-    ]
-
-    # Process chunks in parallel
-    with ThreadPoolExecutor(max_workers=num_threads) as executor:
-        results = executor.map(process_chunk, chunks)
-
-    # Combine results from all threads
-    points = np.vstack(results)
-
-    # Create the PointCloud2 message
-    header = Header()
-    header.stamp = rospy.Time.now()
-    header.frame_id = "camera_link"  # Replace with your frame ID
-
-    fields = [
-        PointField('x', 0, PointField.FLOAT32, 1),
-        PointField('y', 4, PointField.FLOAT32, 1),
-        PointField('z', 8, PointField.FLOAT32, 1)
-    ]
-    point_cloud = pc2.create_cloud(header, fields, points)
-    return point_cloud
 
 def filter_img(image):
     hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
@@ -95,6 +34,7 @@ def callback(color_image, depth_image):
         color_img_filtered = filter_img(color_img)
 
         # process depth image
+        og_msg = depth_image
         depth_img = bridge.imgmsg_to_cv2(depth_image, desired_encoding="passthrough")
         
         # masking, we can throw out invalid points when converting to PointCloud
@@ -110,9 +50,13 @@ def callback(color_image, depth_image):
         filtered_depth_img = np.where(color_img_filtered != 0, depth_img, float('NaN'))
         filtered_depth_img_view = np.where(color_img_filtered != 0, depth_img_view, 255).astype(np.uint8) 
         
+
+        # Convert back to ROS Image message
+        filtered_msg = bridge.cv2_to_imgmsg(filtered_depth_img, encoding="passthrough")
+        filtered_msg.header = og_msg.header  # Retain original message header
         # Publish the filtered depth point cloud
-        point_cloud_msg = parallel_depth_to_pointcloud(filtered_depth_img, valid_mask)
-        pointcloud_pub.publish(point_cloud_msg)
+        filtered_image_pub.publish(filtered_msg)
+        rospy.loginfo("Published filtered depth image")
 
     except CvBridgeError as e:
         rospy.logerr("CvBridge Error: {0}".format(e))
@@ -123,8 +67,9 @@ if __name__ == "__main__":
     color_subscriber = message_filters.Subscriber('/camera/color/image_raw', Image)
     depth_subscriber = message_filters.Subscriber("/camera/aligned_depth_to_color/image_raw", Image)
 
-    # Publisher for the filtered point cloud
-    pointcloud_pub = rospy.Publisher("/filtered_depth/pointcloud", PointCloud2, queue_size=10)
+    filtered_image_pub = rospy.Publisher(
+        "/filtered_depth/image_raw", Image, queue_size=10
+    )
 
 
     ts = message_filters.TimeSynchronizer([color_subscriber, depth_subscriber], 10)

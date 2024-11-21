@@ -1,0 +1,11 @@
+<launch>
+    <!-- Start the Nodelet Manager -->
+    <node pkg="nodelet" type="nodelet" name="nodelet_manager" args="manager" />
+
+    <!-- Load the pointcloud_xyz Nodelet -->
+    <node pkg="nodelet" type="nodelet" name="point_cloud_xyz" args="load depth_image_proc/point_cloud_xyz nodelet_manager">
+        <remap from="image_rect" to="/camera/aligned_depth_to_color/image_raw" />
+        <remap from="camera_info" to="/camera/aligned_depth_to_color/camera_info" />
+        <remap from="points" to="/filtered_depth/pointcloud" />
+    </node>
+</launch>
