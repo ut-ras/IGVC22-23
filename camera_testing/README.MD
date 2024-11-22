@@ -14,6 +14,7 @@ If unsure which topic to record, check the python file and see which topic we ar
 
 ## Running the Camera
 To run the camera, open a new terminal and run the command `roslaunch realsense2_camera rs_camera.launch filters:=pointcloud`.
+For higher resolution images, run `roslaunch realsense2_camera rs_camera.launch filters:=pointcloud align_depth:=true color_width:=1280 color_height:=720 color_fps:=30 depth_width:=1280 depth_height:=720 depth_fps:=30`
 
 ## ToDo:
 
