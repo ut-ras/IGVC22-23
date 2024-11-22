@@ -14,17 +14,36 @@ depth_img = None
 filtered_depth_img_view = None
 max_depth = 2500
 
+import cv2
+import numpy as np
+
 def filter_img(image):
+    # Convert to HSV
     hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    blurred_image = cv2.GaussianBlur(hsv_image, (15, 15), 20)  # Adjust kernel size and sigma value as needed
-    lower_road = np.array([0, 0, 50])
-    upper_road = np.array([179, 50, 200])
-
+    
+    # Apply Gaussian blur
+    blurred_image = cv2.GaussianBlur(hsv_image, (31, 31), 0)
+    
+    # Define HSV thresholds
+    lower_road = np.array([0, 0, 40])
+    upper_road = np.array([180, 60, 220])
+    
+    # Create a mask for the road
     road_mask = cv2.inRange(blurred_image, lower_road, upper_road)
-
-    # Invert image
+    
+    # Perform morphological operations
+    kernel = np.ones((5, 5), np.uint8)
+    road_mask = cv2.morphologyEx(road_mask, cv2.MORPH_CLOSE, kernel)
+    road_mask = cv2.morphologyEx(road_mask, cv2.MORPH_OPEN, kernel)
+    
+    # Invert the mask
     inverse_mask = cv2.bitwise_not(road_mask)
+    
+    # Apply median blur for smoothing
+    inverse_mask = cv2.medianBlur(inverse_mask, 5)
+    
     return inverse_mask
+
 
 def callback(color_image, depth_image):
     global color_img, color_img_filtered, depth_img, depth_img_view, filtered_depth_img, filtered_depth_img_view, max_depth
@@ -47,7 +66,7 @@ def callback(color_image, depth_image):
         depth_img_view = cv2.normalize(depth_img_view, None, 0, 255, cv2.NORM_MINMAX)
         depth_img_view = depth_img_view.astype(np.uint8)
 
-        filtered_depth_img = np.where(color_img_filtered != 0, depth_img, float('NaN'))
+        filtered_depth_img = np.where(color_img_filtered != 0, depth_img, float('NaN')) # 0 or NaN?
         filtered_depth_img_view = np.where(color_img_filtered != 0, depth_img_view, 255).astype(np.uint8) 
         
 
